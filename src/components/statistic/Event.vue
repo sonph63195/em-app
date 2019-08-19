@@ -17,6 +17,7 @@
             <b-form-group label="Actual Start Date" label-for="input-actualStartDate">
               <b-form-input
                 id="input-actualStartDate"
+                type="date"
                 v-model="event.actualStartDate"
                 class="w-100"
                 trim
@@ -27,6 +28,7 @@
             <b-form-group label="Actual End Date" label-for="input-actualEndDate">
               <b-form-input
                 id="input-actualEndDate"
+                type="date"
                 v-model="event.actualEndDate"
                 class="w-100"
                 trim
@@ -47,11 +49,10 @@
     </b-col>
     <div class="d-flex justify-content-end">
       <b-col cols="4" class="mt-2 ml-5" md="6">
-        <hot-table :settings="hotSettings">
-        </hot-table>
+        <hot-table :settings="hotSettings"></hot-table>
       </b-col>
     </div>
-  </b-row>    
+  </b-row>
 </template>
 
 <script>
@@ -61,7 +62,7 @@ import HotTable from "@handsontable/vue";
 export default {
   components: {
     Chart,
-    HotTable,
+    HotTable
   },
   data() {
     return {
@@ -97,16 +98,16 @@ export default {
           }
         ]
       },
-      hotSettings:{
-        data:[
-        ["HCM.IUH_INTE_JAVA_HCM19_001",60],
-        ["HCM.IUH_INTE_JAVA_HCM19_002",59],
-        ["HCM.IUH_INTE_JAVA_HCM19_003",75],
-        ["HCM.IUH_INTE_JAVA_HCM19_004",12],
-        ["HCM.IUH_INTE_JAVA_HCM19_005",15],
+      hotSettings: {
+        data: [
+          ["HCM.IUH_INTE_JAVA_HCM19_001", 60],
+          ["HCM.IUH_INTE_JAVA_HCM19_002", 59],
+          ["HCM.IUH_INTE_JAVA_HCM19_003", 75],
+          ["HCM.IUH_INTE_JAVA_HCM19_004", 12],
+          ["HCM.IUH_INTE_JAVA_HCM19_005", 15]
         ],
         columnSorting: true,
-        colHeaders: ["Event Code","Candidate quantity"],
+        colHeaders: ["Event Code", "Candidate quantity"]
       }
     };
   }

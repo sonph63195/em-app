@@ -1,114 +1,147 @@
 <template>
-  <b-row class="event-content">
-    <b-col v-if="getEventLoading.loading" cols="12" class="bg-white rounded-5 mb-3 p-3 text-center">
-      <b-spinner style="width: 3rem; height: 3rem;" label="Loading"></b-spinner>
-    </b-col>
-    <b-col
-      v-if="!getEventLoading.loaded && (!getEventLoading.loading && events.length <= 0)"
-      cols="12"
-      class="alert alert-info border-0 rounded-5 mb-3 p-3 text-center"
-    >Oops~ It's empty. Let's get back later.</b-col>
-    <b-col
-      cols="12"
-      v-for="(event, index) in events"
-      :key="index"
-      class="event-item bg-white rounded-5 flex-column flex-xl-row d-flex mb-3"
-    >
-      <div class="flex-fill flex-row d-flex py-3 mr-lg-3">
-        <div class="event-checkbox align-self-lg-center mr-3">
-          <b-form-checkbox
-            v-model="event.isChosen"
-            :disabled="eventIsDoneOrCancel(event.eventStatus)"
-          ></b-form-checkbox>
-        </div>
-        <div
-          class="event-title align-self-lg-center flex-grow-1 flex-column flex-sm-row flex-lg-column d-flex text-wrap"
-        >
-          <div class="captionSubtitle d-none d-lg-block">Course code:</div>
-          <div
-            class="title d-inline-block text-truncate w-100"
-            v-b-tooltip.hover
-            :title="event.courseCode"
-          >{{ event.courseCode }}</div>
-          <div class="event-status">
-            <span class="badge" :class="eventStatusColor(event.eventStatus)">{{ event.eventStatus }}</span>
-          </div>
-        </div>
+  <b-row>
+    <b-col v-if="getEventLoading.loading" cols="12">
+      <div class="bg-white rounded-5 mb-3 p-3 text-center">
+        <b-spinner style="width: 3rem; height: 3rem;" label="Loading"></b-spinner>
       </div>
-      <div class="event-content flex-lg-row d-lg-flex">
-        <div
-          class="flex-1 d-flex flex-row flex-lg-column mt-lg-3 ml-md-2 mb-3 align-self-lg-center"
-        >
-          <div class="flex-1 w-50 w-lg-100">
-            <div class="captionSubtitle text-truncate flex-0">Site:</div>
-            <div class="subtitle flex-0">{{ event.site }}</div>
+    </b-col>
+
+    <b-col cols="12">
+      <b-card
+        no-body
+        v-for="event in events"
+        :key="event.eventId"
+        :id="event.eventId"
+        class="border-0 mb-3"
+      >
+        <div class="d-block d-lg-flex align-self-stretch align-items-center">
+          <div class="d-lg-flex course-code flex-fill">
+            <div class="align-self-lg-center pl-3">
+              <b-form-checkbox
+                v-model="event.isChosen"
+                :disabled="eventIsDoneOrCancel(event.eventStatus)"
+              />
+            </div>
+            <div class="flex-fill p-3">
+              <span class="captionSubtitle">Course code</span>
+              <div class="title text-truncate">{{ event.courseCode }}</div>
+              <span class="badge mt-2" :class="eventStatusColor(event.eventStatus)">
+                <h5 class="mb-0">{{ event.eventStatus }}</h5>
+              </span>
+            </div>
           </div>
-          <div class="flex-1 w-50 w-lg-100">
-            <div class="captionSubtitle text-truncate flex-0">Supplier/Partner:</div>
-            <div class="subtitle text-wrap w-100 flex-0">{{ event.supplier }}</div>
+          <div class="d-block px-3 pb-3 time">
+            <table class="w-100">
+              <tr class="captionSubtitle">
+                <td></td>
+                <td class="text-center">Plan</td>
+                <td class="text-center">Actual</td>
+              </tr>
+              <tr>
+                <td class="captionSubtitle">Start</td>
+                <td class="p-1 text-center">{{ formatDate(event.plannedStartDate, "DD-MMM-YYYY") }}</td>
+                <td class="p-1 text-center">{{ formatDate(event.actualStartDate, "DD-MMM-YYYY") }}</td>
+              </tr>
+              <tr class="border-top">
+                <td class="captionSubtitle">End</td>
+                <td class="p-1 text-center">{{ formatDate(event.plannedEndDate, "DD-MMM-YYYY") }}</td>
+                <td class="p-1 text-center">{{ formatDate(event.actualEndDate, "DD-MMM-YYYY") }}</td>
+              </tr>
+            </table>
           </div>
-        </div>
-        <div
-          class="flex-1 d-flex flex-row flex-lg-column mt-lg-3 ml-md-2 mb-3 align-self-lg-center"
-        >
-          <div class="flex-1 w-50 w-lg-100">
-            <div class="captionSubtitle text-truncate flex-0">Course Name:</div>
-            <div class="subtitle flex-0">{{ event.courseName }}</div>
+          <div class="d-block px-3 pb-3">
+            <div>
+              <span class="captionSubtitle">Course name</span>
+              <div>{{ event.courseName }}</div>
+            </div>
+            <div>
+              <span class="captionSubtitle">Sub-subject Type</span>
+              <div class="text-wrap">{{ event.subSubjectType }}</div>
+            </div>
           </div>
-          <div class="flex-1 w-50 w-lg-100">
-            <div class="captionSubtitle text-truncate flex-0">Subject Type:</div>
-            <div class="subtitle flex-0">{{ event.subjectType }}</div>
+          <div class="d-block px-3 pb-3 site-supplier">
+            <div>
+              <span class="captionSubtitle">site</span>
+              <div>{{ event.site }}</div>
+            </div>
+            <div>
+              <span class="captionSubtitle">SUPPLIER</span>
+              <div class="text-wrap">{{ event.supplier }}</div>
+            </div>
           </div>
-        </div>
-        <div
-          class="flex-1 d-flex flex-row flex-lg-column mt-lg-3 ml-md-2 mb-3 align-self-lg-center"
-        >
-          <div class="flex-1 w-50 w-lg-100">
-            <div class="captionSubtitle text-truncate flex-0">Planned Start date:</div>
-            <div class="subtitle flex-0">{{ event.plannedStartDate }}</div>
-          </div>
-          <div class="flex-1 w-50 w-lg-100">
-            <div class="captionSubtitle text-truncate flex-0">Planned End Date:</div>
-            <div class="subtitle flex-0">{{ event.plannedEndDate }}</div>
-          </div>
-        </div>
-        <div class="flex-1 d-flex flex-row mt-lg-3 mb-3 align-self-lg-center">
-          <div class="flex-1 w-50 w-lg-100">
-            <div class="captionSubtitle text-truncate text-center w-100 flex-0">Candidates:</div>
-            <div class="subtitle flex-0 text-center">{{ event.actualNumberOfTrainees }}</div>
-          </div>
-          <div class="flex-0 w-50 align-self-center text-center">
-            <div class="event-action">
-              <b-button
-                v-b-tooltip.hover
-                title="View event's information"
-                pill
-                class="btn-icon m-1"
-                @click="viewEventInfo(event)"
-                variant="light"
-              >
-                <font-awesome-icon icon="eye" />
-              </b-button>
+          <div class="event-action mt-3 mt-lg-0 mr-0 mr-lg-3">
+            <div>
+              <div class="d-flex flex-lg-column">
+                <div class="d-flex flex-fill">
+                  <div class="flex-fill">
+                    <b-button
+                      v-b-tooltip.hover
+                      title="View event's info"
+                      @click="viewEventInfo(event)"
+                      variant="light"
+                      block
+                    >
+                      <font-awesome-icon icon="eye" />
+                    </b-button>
+                  </div>
+                  <div class="flex-fill">
+                    <b-button
+                      v-b-tooltip.hover
+                      title="Edit event's info"
+                      @click="editEvent(event)"
+                      variant="light"
+                      block
+                    >
+                      <font-awesome-icon icon="edit" />
+                    </b-button>
+                  </div>
+                  <div class="flex-fill">
+                    <b-button v-b-tooltip.hover title="View candidate list" variant="light" block>
+                      <font-awesome-icon icon="users" />
+                    </b-button>
+                  </div>
+                </div>
+                <div class="d-flex flex-fill mt-lg-2">
+                  <div class="flex-fill">
+                    <b-button v-b-tooltip.hover title="Create candidate" variant="light" block>
+                      <font-awesome-icon icon="plus-circle" />
+                    </b-button>
+                  </div>
+                  <div class="flex-fill">
+                    <b-button v-b-tooltip.hover title="Import candidate" variant="light" block>
+                      <font-awesome-icon icon="file-import" />
+                    </b-button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </b-card>
     </b-col>
+    <EditEvent id="modalEditEvent" ref="popupEditEvent" :event="currentEvent" />
   </b-row>
 </template>
 
 
 <script>
-import { EventStatusMixin } from "../mixins";
+import EditEvent from "./EditEvent";
+
+import { EventStatusMixin, PopupMixin } from "../mixins";
 
 /* eslint-disable */
 export default {
   props: {
     checkedAll: Boolean
   },
-  mixins: [EventStatusMixin],
+  components: {
+    EditEvent
+  },
+  mixins: [EventStatusMixin, PopupMixin],
   data() {
-    return {};
+    return {
+      currentEvent: {}
+    };
   },
   computed: {
     getEventLoading() {
@@ -141,25 +174,17 @@ export default {
     /**
      *
      */
-    getEvents(pageNumber) {
-      this.$emit("getEvents", pageNumber);
-    },
-
-    /**
-     *
-     */
-    removeEvent(index) {
-      this.$emit("removeEvent", [this.events[index]]);
-    },
-
-    /**
-     *
-     */
     viewEventInfo(event) {
-      // Save event in local storage
-      const eventParsed = JSON.stringify(event);
-      localStorage.setItem("event", eventParsed);
-      this.$router.push(`/event-info/eventId=${event.eventId}`);
+      this.$router.push({
+        name: "eventInfoPage",
+        params: {
+          eventId: event.eventId
+        }
+      });
+    },
+    editEvent(event) {
+      this.currentEvent = event;
+      this.$bvModal.show("modalEditEvent");
     }
   }
 };

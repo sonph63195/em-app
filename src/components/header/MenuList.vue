@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex">
+  <div class="d-block d-md-flex">
     <b-nav-item :active="url.includes('event')" to="/event">Event Management</b-nav-item>
     <b-nav-item :active="url.includes('candidate')" to="/candidate">Candidate Management</b-nav-item>
     <b-nav-item :active="url.includes('statistic')" to="/statistic">Statistic</b-nav-item>

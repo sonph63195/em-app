@@ -3,7 +3,7 @@
   <b-collapse
     v-b-scrollspy:nav-scroller
     id="sidebar"
-    style="width: 320px; height=100vh; margin-right: 2rem; background: #6d7fcc;"
+    style="width: 320px; height=100vh; margin-right: 2rem; background: #6699FF;"
     visible
   >
     <div class="fixed-top" style="width: 250px;">

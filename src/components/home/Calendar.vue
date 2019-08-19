@@ -50,7 +50,7 @@
       :usageStatistics="false"
       @mounted="onMounted"
       ref="calendar"
-      style="height: 425px;"
+      style="height: 550px;"
     />
     <div class="text-muted my-2 d-none">
       <font-awesome-icon icon="lightbulb" />&nbsp;Double click in calendar to create new event.

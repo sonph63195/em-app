@@ -232,9 +232,8 @@ $body-bg: #efefef;
   }
   .title {
     font-style: normal !important;
-    font-size: 20px !important;
-    line-height: 20px !important;
-    transform: translateY(0.96px);
+    font-size: 24px !important;
+    line-height: 24px !important;
     letter-spacing: -0.17px !important;
   }
   &-active {
@@ -415,17 +414,6 @@ $body-bg: #efefef;
   .modal-custome {
     max-width: 480px !important;
   }
-  .event-title {
-    width: 290px !important;
-  }
-  .event-content {
-    > * {
-      width: 160px !important;
-    }
-    // > div:nth-child(4) {
-    //   width: 300px !important;
-    // }
-  }
 }
 
 //--breakpoint-lg:
@@ -435,5 +423,21 @@ $body-bg: #efefef;
   }
   .modal-custome {
     max-width: 620px !important;
+  }
+  .course-code {
+    width: 400px !important;
+  }
+  .site-supplier {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .time {
+    width: 350px;
+  }
+  .site-supplier {
+    display: block !important;
+    width: 350px !important;
   }
 }

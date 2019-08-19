@@ -2,10 +2,10 @@
   <div>
     <Header />
     <main class="mt-3">
-      <b-container>
+      <b-container fluid>
         <section class="event position-relative">
           <b-row class="event-header">
-            <b-col cols="12" class="mb-3 p-0 d-flex flex-column">
+            <b-col cols="12" class="mb-3 d-flex flex-column">
               <div class="main-action flex-1 d-flex flex-column flex-lg-row flex-lg-grow-0 w-100">
                 <b-button
                   v-b-modal.modal-ImportEvent
@@ -36,8 +36,9 @@
                   <b-dd text="Subject Type" size="sm" variant="white" class="m-2">
                     <b-dropdown-form>
                       <b-form-checkbox
-                        v-for="(sub_subject) in subSubject.options"
+                        v-for="(sub_subject) in subSubject"
                         :key="sub_subject.value"
+                        class="text-truncate"
                       >{{ sub_subject.text }}</b-form-checkbox>
                     </b-dropdown-form>
                   </b-dd>
@@ -65,15 +66,15 @@
           />
           <!-- End content -->
 
-          <b-row class="event-footer fixed-bottom sticky-top">
-            <b-col cols="12" class="bg-white rounded-5 pt-3 foot-nav-stick">
-              <div class="d-flex">
+          <b-row class="fixed-bottom sticky-top mx-0 bg-white rounded-5 pt-3 border-top">
+            <b-col cols="12" class>
+              <div class="d-flex flex-column flex-md-row">
                 <div class="flex-fill">
                   <b-button @click="showRemoveEventOnList" variant="light">
                     <font-awesome-icon icon="trash" class="mr-3" />Cancel Event
                   </b-button>
                 </div>
-                <div>
+                <div class="mt-3 mt-md-0 align-self-center">
                   <b-pagination-nav :link-gen="linkGen" :number-of-pages="3" use-router></b-pagination-nav>
                 </div>
               </div>
@@ -200,22 +201,9 @@ export default {
     // When component was created, just get page number, default page number = 1. and redirect page to page=1
     // After that will call event list with page number.
     let pageNumber = this.$route.params.page;
-    // let isNumPage = pageNumber === undefined;
-    // pageNumber = isNumPage ? 1 : pageNumber;
-    // if (isNumPage) this.paginPage(pageNumber);
     this.getEvents(pageNumber);
   },
   watch: {
-    /**
-     * This watch excutes when pageNumber variable change.
-     * This watch call getEvents methods.
-     */
-    // pageNumber: {
-    //   immediate: true,
-    //   handler() {
-    //     //this.getEvents(this.pageNumber);
-    //   }
-    // }
     cancelEventState: {
       handler() {
         //let eventIds = this.eventsRemove.flatMap(event => event.eventId);
@@ -236,6 +224,20 @@ export default {
         }
         // close confirm popup
         this.hidePopup("modalRemoveEvents", "removeEvents");
+      }
+    },
+
+    subSubjects: {
+      handler() {
+        const subSubjects = this.subSubjects.data;
+        if (subSubjects) {
+          this.subSubject = subSubjects.flatMap(subSubject => {
+            return {
+              value: subSubject.subSubjectTypeName,
+              text: subSubject.subSubjectTypeName
+            };
+          });
+        }
       }
     }
   },
@@ -266,6 +268,13 @@ export default {
      */
     cancelEventState() {
       return this.$store.state.event.cancelEvent;
+    },
+
+    /**
+     *
+     */
+    subSubjects() {
+      return this.$store.state.subject.getSubSubject;
     }
   },
   methods: {
@@ -380,6 +389,10 @@ export default {
     paginPage(pageNum) {
       this.$router.push(this.linkGen(pageNum));
     },
+
+    /**
+     *
+     */
     linkGen(pageNum) {
       return {
         name: "eventPage",

@@ -1,7 +1,7 @@
 <template>
   <header>
     <b-navbar toggleable="lg" type="light" variant="white" class="shadow-sm">
-      <b-container>
+      <b-container fluid>
         <b-navbar-brand to="/">
           <img src="@/assets/Logo.svg" width="117" alt />
         </b-navbar-brand>

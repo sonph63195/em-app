@@ -33,6 +33,8 @@ export const authenticate = {
                 commit("authenticateSuccess", success);
                 // eslint-disable-next-line no-console
                 console.log(success);
+                // eslint-disable-next-line no-console
+                console.log(success.headers.getAll());
 
             }, error => {
                 // eslint-disable-next-line no-console
