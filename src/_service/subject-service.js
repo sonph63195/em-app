@@ -1,4 +1,4 @@
-import { request } from "../_helper";
+import { request, authHeader } from "../_helper";
 
 export const subjectService = {
     getSubjectTypeList,
@@ -6,9 +6,9 @@ export const subjectService = {
 }
 
 function getSubjectTypeList() {
-    return request.get("subjectType");
+    return request.get("subjectType", authHeader.get());
 }
 
 function getSubSubjectTypeList() {
-    return request.get("skills");
+    return request.get("skills", authHeader.get());
 }

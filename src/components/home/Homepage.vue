@@ -26,9 +26,9 @@
                             class="flex-fill badge badge-success mr-2"
                           >Passed: {{ sectionStatus["Passed"] }}</span>
                           <span
-                            v-if="sectionStatus['Done']"
+                            v-if="sectionStatus.Done"
                             class="flex-fill badge badge-warning mr-2"
-                          >Done: {{ sectionStatus["Done"] }}</span>
+                          >Done: {{ sectionStatus.Done }}</span>
                           <span
                             v-if="sectionStatus['Cancel']"
                             class="flex-fill badge badge-danger mr-3"
@@ -57,9 +57,9 @@
                       <div v-if="!loading.event">
                         <div class="d-block event-details h4">
                           <span
-                            v-if="eventStatus['Finish']"
+                            v-if="eventStatus['Done']"
                             class="flex-fill badge badge-warning mr-2"
-                          >Finish: {{ eventStatus["Finish"] }}</span>
+                          >Done: {{ eventStatus["Done"] }}</span>
                           <span
                             v-if="eventStatus['On-going']"
                             class="flex-fill badge badge-success mr-2"

@@ -216,20 +216,22 @@ $body-bg: #efefef;
   }
 }
 
+.captionSubtitle {
+  font-style: normal !important;
+  font-size: 12px;
+  line-height: 20px !important;
+  transform: translateY(1.8px);
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.54) !important;
+  fill: rgba(0, 0, 0, 0.54) !important;
+}
+
 .event {
   &-item {
     border: 1px solid transparent;
   }
-  .captionSubtitle {
-    font-style: normal !important;
-    font-size: 12px;
-    line-height: 20px !important;
-    transform: translateY(1.8px);
-    letter-spacing: 0.03em !important;
-    text-transform: uppercase;
-    color: rgba(0, 0, 0, 0.54) !important;
-    fill: rgba(0, 0, 0, 0.54) !important;
-  }
+
   .title {
     font-style: normal !important;
     font-size: 24px !important;

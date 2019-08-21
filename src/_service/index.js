@@ -2,6 +2,7 @@ export * from "./authenticate-service";
 export * from "./campuslinkprogram-service";
 export * from "./candidate-service";
 export * from "./event-service";
+export * from "./faculty-service";
 export * from "./file-service";
 export * from "./home-service";
 export * from "./section-service";

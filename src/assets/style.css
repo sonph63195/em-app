@@ -12596,11 +12596,7 @@ input[type="color"].form-control:disabled {
   background: rgba(196, 196, 196, 0.2);
 }
 
-.event-item {
-  border: 1px solid transparent;
-}
-
-.event .captionSubtitle {
+.captionSubtitle {
   font-style: normal !important;
   font-size: 12px;
   line-height: 20px !important;
@@ -12610,6 +12606,10 @@ input[type="color"].form-control:disabled {
   text-transform: uppercase;
   color: rgba(0, 0, 0, 0.54) !important;
   fill: rgba(0, 0, 0, 0.54) !important;
+}
+
+.event-item {
+  border: 1px solid transparent;
 }
 
 .event .title {

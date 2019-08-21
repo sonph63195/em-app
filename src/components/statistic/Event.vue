@@ -44,25 +44,23 @@
         <b-button type="submit">Export File</b-button>
       </div>
     </b-col>
-    <b-col cols="12" md="8">
-      <Chart id="eventDoughnut" :data="dataEvent" />
+    <b-col cols="12" md="10">
+      <ChartCOE />
+      <!-- <EventChart/> -->
     </b-col>
     <div class="d-flex justify-content-end">
-      <b-col cols="4" class="mt-2 ml-5" md="6">
-        <hot-table :settings="hotSettings"></hot-table>
+      <b-col cols="8" class="mt-2 ml-5" md="4">
+        <b-table class="border 1" striped hover :items="items" :fields="fields"></b-table>
       </b-col>
     </div>
   </b-row>
 </template>
 
 <script>
-import Chart from "./Chart";
-import "handsontable/dist/handsontable.full.css";
-import HotTable from "@handsontable/vue";
+import ChartCOE from "./ChartCOE";
 export default {
   components: {
-    Chart,
-    HotTable
+    ChartCOE
   },
   data() {
     return {
@@ -98,17 +96,14 @@ export default {
           }
         ]
       },
-      hotSettings: {
-        data: [
-          ["HCM.IUH_INTE_JAVA_HCM19_001", 60],
-          ["HCM.IUH_INTE_JAVA_HCM19_002", 59],
-          ["HCM.IUH_INTE_JAVA_HCM19_003", 75],
-          ["HCM.IUH_INTE_JAVA_HCM19_004", 12],
-          ["HCM.IUH_INTE_JAVA_HCM19_005", 15]
-        ],
-        columnSorting: true,
-        colHeaders: ["Event Code", "Candidate quantity"]
-      }
+      fields: ["course_code", "enrolled_students"],
+      items: [
+        { course_code: "HCM.IUH_INTE_JAVA_HCM19_001", enrolled_students: "60" },
+        { course_code: "HCM.IUH_INTE_JAVA_HCM19_002", enrolled_students: "59" },
+        { course_code: "HCM.IUH_INTE_JAVA_HCM19_003", enrolled_students: "75" },
+        { course_code: "HCM.IUH_INTE_JAVA_HCM19_004", enrolled_students: "12" },
+        { course_code: "HCM.IUH_INTE_JAVA_HCM19_005", enrolled_students: "25" },
+      ]
     };
   }
 };

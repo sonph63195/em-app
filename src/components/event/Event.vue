@@ -193,7 +193,6 @@ export default {
       ],
       course: [],
       subSubject: [],
-
       eventsRemove: null
     };
   },
@@ -202,6 +201,10 @@ export default {
     // After that will call event list with page number.
     let pageNumber = this.$route.params.page;
     this.getEvents(pageNumber);
+    // some params
+    this.getSupplier();
+    this.getSubSubjectType();
+    this.getCampuslink();
   },
   watch: {
     cancelEventState: {
@@ -278,6 +281,15 @@ export default {
     }
   },
   methods: {
+    getSupplier() {
+      this.$store.dispatch("supplier/getSupplier");
+    },
+    getSubSubjectType() {
+      this.$store.dispatch("subject/getSubSubject");
+    },
+    getCampuslink() {
+      this.$store.dispatch("campuslink/getCampuslink");
+    },
     /**
      * File added Event when user drag or choose a file
      */

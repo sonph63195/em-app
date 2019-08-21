@@ -1,5 +1,5 @@
 <template>
-  <b-col cols="12" md="4">
+  <b-col cols="12" md="4" lg="3">
     <div class="py-3">
       <h4 class="text-muted text-center">Recent Event</h4>
     </div>

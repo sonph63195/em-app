@@ -6,7 +6,7 @@ export const EventStatusMixin = {
         eventStatusColor(name) {
             let result = "badge-";
             switch (name) {
-                case "Finish":
+                case "Done":
                     result += "warning";
                     break;
                 case "Cancel":

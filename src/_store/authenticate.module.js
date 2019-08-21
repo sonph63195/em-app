@@ -1,11 +1,11 @@
 import { authenticateService } from '../_service';
+import { cookies, router } from "../_helper";
 
 export const authenticate = {
     namespaced: true,
     state: {
         login: {
-            loading: false,
-            token: null
+            loading: false
         }
     },
     mutations: {
@@ -14,15 +14,19 @@ export const authenticate = {
                 loading: true
             }
         },
-        authenticateSuccess(state, token) {
+        authenticateSuccess(state) {
             state.login = {
-                success: true,
-                token: token
+                success: true
             }
         },
         authenticateFailure(state) {
             state.login = {
                 success: false
+            }
+        },
+        logout(state) {
+            state.login = {
+                loading: false
             }
         }
     },
@@ -30,16 +34,28 @@ export const authenticate = {
         authenticate({ commit }, { username, password }) {
             commit("authenticateRequest");
             authenticateService.login(username, password).then(success => {
-                commit("authenticateSuccess", success);
                 // eslint-disable-next-line no-console
-                console.log(success);
-                // eslint-disable-next-line no-console
-                console.log(success.headers.getAll());
+                // console.log(success.headers.map.authorization);
+                if (success.ok) {
+                    cookies.set("token", success.headers.map.authorization);
+                    cookies.set("username", username);
+                    commit("authenticateSuccess");
+                    router.push("/");
+                } else {
+                    commit("authenticateFailure");
+                }
 
             }, error => {
+                commit("authenticateFailure");
                 // eslint-disable-next-line no-console
                 console.log(error);
             })
+        },
+        logout({ commit }) {
+            commit("logout");
+            cookies.remove("username");
+            cookies.remove("token");
+            router.push("/login");
         }
     }
 }

@@ -18,6 +18,11 @@
               </center>
               <br />
               <b-form @submit="login" ref="form" class="needs-validation" novalidate>
+                <b-alert
+                  variant="danger"
+                  :show="!success && loading === undefined"
+                  dismissible
+                >Username or password doesn't match</b-alert>
                 <b-form-group label="Username:" label-for="username">
                   <b-form-input
                     invalid-feedback="Username is required"
@@ -57,6 +62,9 @@ export default {
   computed: {
     loading() {
       return this.$store.state.authenticate.login.loading;
+    },
+    success() {
+      return this.$store.state.authenticate.login.success;
     },
     token() {
       return this.$store.state.authenticate.login.token;

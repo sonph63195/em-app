@@ -1,4 +1,4 @@
-import { request } from "../_helper";
+import { request, authHeader } from "../_helper";
 
 export const homeService = {
     getSubSubjectType,
@@ -8,17 +8,17 @@ export const homeService = {
 }
 
 function getSubSubjectType() {
-    return request.get("report/subSubjectType");
+    return request.get("report/subSubjectType", authHeader.get());
 }
 
 function getCampusLink() {
-    return request.get("report/campusLink");
+    return request.get("report/campusLink", authHeader.get());
 }
 
 function getEventStatus() {
-    return request.get("report/event-status");
+    return request.get("report/event-status", authHeader.get());
 }
 
 function getSectionStatus() {
-    return request.get("report/section-status");
+    return request.get("report/section-status", authHeader.get());
 }

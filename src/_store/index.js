@@ -6,6 +6,7 @@ import { authenticate } from './authenticate.module';
 import { campuslink } from "./campuslink.module";
 import { candidate } from "./candidate.module";
 import { event } from "./event.module"
+import { faculty } from "./faculty.module"
 import { file } from "./file.module";
 import { home } from "./home.module";
 import { section } from "./section.module";
@@ -18,6 +19,7 @@ export const store = new Vuex.Store({
         campuslink,
         candidate,
         event,
+        faculty,
         file,
         home,
         section,

@@ -56,11 +56,23 @@
       <font-awesome-icon icon="lightbulb" />&nbsp;Double click in calendar to create new event.
     </div>
     <div class="heper d-flex mt-3 border-top">
-      <span class="badge badge-primary m-2">Planning</span>
-      <span class="badge badge-success m-2">On-going</span>
+      <b-form-checkbox v-model="showPlan" class="m-1 text-primary">Planning</b-form-checkbox>
+
+      <b-form-checkbox
+        id="onGoing"
+        v-model="showOnGoing"
+        class="m-1 ml-3 text-success onGoing"
+      >On-going</b-form-checkbox>
     </div>
   </div>
 </template>
+
+<style>
+#onGoing:checked ~ .custom-control-label::before {
+  border-color: #28a745;
+  background-color: #28a745;
+}
+</style>
 
 <script>
 import "tui-calendar/dist/tui-calendar.css";
@@ -81,7 +93,7 @@ export default {
       loading: true,
       calendar: null,
       options: {
-        view: "week",
+        view: "month",
         month: {
           visibleWeeksCount: 6,
           startDayOfWeek: 1
@@ -93,7 +105,9 @@ export default {
           name: "Planning"
         }
       ],
-      schedules: []
+      schedules: [],
+      showPlan: true,
+      showOnGoing: true
     };
   },
   computed: {
@@ -113,30 +127,21 @@ export default {
     eventsCalendarState: {
       immediate: true,
       handler() {
-        this.schedules = [];
-        this.events.forEach(event => {
-          if (
-            event.eventStatus !== "Finish" &&
-            event.eventStatus !== "Cancel"
-          ) {
-            let a = {
-              id: event.eventId,
-              calendarId: event.eventId,
-              title: event.courseCode,
-              category: "time",
-              dueDateClass: "",
-              color: "#f8f9fa",
-              bgColor: this.getColor(event.eventStatus),
-              borderColor: "#343a40",
-              start: this.getDate(event, "start"),
-              end: this.getDate(event, "end")
-            };
-            this.schedules.push(a);
-          }
-        });
+        this.generateSchedule();
+        this.showByStatus();
         this.loading =
           this.eventsCalendarState.m.loading ||
           this.eventsCalendarState.w.loading;
+      }
+    },
+    showPlan: {
+      handler() {
+        this.showByStatus();
+      }
+    },
+    showOnGoing: {
+      handler() {
+        this.showByStatus();
       }
     }
   },
@@ -219,6 +224,45 @@ export default {
         );
         this.$store.dispatch("event/eventsWeek", { startDate, endDate });
       }
+    },
+    generateSchedule() {
+      this.schedules = [];
+      this.events.forEach(event => {
+        if (event.eventStatus !== "Finish" && event.eventStatus !== "Cancel") {
+          let a = {
+            id: event.eventId,
+            calendarId: event.eventId,
+            title: event.courseCode,
+            category: "time",
+            dueDateClass: "",
+            status: event.eventStatus,
+            color: "#f8f9fa",
+            bgColor: this.getColor(event.eventStatus),
+            borderColor: "#343a40",
+            start: this.getDate(event, "start"),
+            end: this.getDate(event, "end")
+          };
+          this.schedules.push(a);
+        }
+      });
+    },
+    showByStatus() {
+      this.generateSchedule();
+      let result = [];
+      if (this.showPlan) {
+        result = [...this.showByPlan()];
+      }
+      if (this.showOnGoing) {
+        result = [...result, ...this.showByOnGoing()];
+      }
+      this.schedules = result;
+      return result;
+    },
+    showByPlan() {
+      return this.schedules.filter(event => event.status === "Planning");
+    },
+    showByOnGoing() {
+      return this.schedules.filter(event => event.status === "On-going");
     }
   }
 };

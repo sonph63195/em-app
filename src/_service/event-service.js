@@ -1,4 +1,4 @@
-import { request } from "../_helper"
+import { request, authHeader } from "../_helper"
 
 export const eventService = {
     getEventList,
@@ -7,7 +7,9 @@ export const eventService = {
     updateEvent,
     eventRecent,
     getEventsMonth,
-    getEventsWeek
+    getEventsWeek,
+    createEventFromManual,
+    loadAllCourseCode
 }
 
 /**
@@ -15,7 +17,7 @@ export const eventService = {
  * @param {int} pageNumber Page number to send to get list on paginate
  */
 function getEventList(pageNumber) {
-    return request.get(`events/${pageNumber}`);
+    return request.get(`events/${pageNumber}`, authHeader.get());
 }
 
 /**
@@ -23,7 +25,7 @@ function getEventList(pageNumber) {
  * @param {*} eventId
  */
 function getEventById(eventId) {
-    return request.get(`event?eventId=${eventId}`);
+    return request.get(`event?eventId=${eventId}`, authHeader.get());
 }
 
 /**
@@ -35,7 +37,7 @@ function cancelEvent(eventIds) {
     eventIds.forEach(id => {
         url += `eventId=${id}&`
     });
-    return request.patch(`event?${url}`);
+    return request.patch(`event?${url}`, null, authHeader.get());
 }
 
 /**
@@ -43,20 +45,42 @@ function cancelEvent(eventIds) {
  * @param {*} event 
  */
 function updateEvent(event) {
-    return request.put('events', event);
+    return request.put('events', event, authHeader.get());
 }
 
 /**
  * 
  */
 function eventRecent() {
-    return request.get("events/recent");
+    return request.get("events/recent", authHeader.get());
 }
 
+/**
+ * 
+ * @param {*} year 
+ * @param {*} month 
+ */
 function getEventsMonth(year, month) {
-    return request.get(`events-month/${year}/${month}`);
+    return request.get(`events-month/${year}/${month}`, authHeader.get());
 }
 
+/**
+ * 
+ * @param {*} startDate 
+ * @param {*} endDate 
+ */
 function getEventsWeek(startDate, endDate) {
-    return request.get(`events-week/${startDate}/${endDate}`);
+    return request.get(`events-week/${startDate}/${endDate}`, authHeader.get());
+}
+
+/**
+ * 
+ * @param {*} event 
+ */
+function createEventFromManual(event) {
+    return request.post(`event`, event, authHeader.get());
+}
+
+function loadAllCourseCode() {
+    return request.get(`courses-code`, authHeader.get());
 }

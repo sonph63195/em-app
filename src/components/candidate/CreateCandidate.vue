@@ -1,19 +1,47 @@
 <template>
-  <div>
-    <!-- Tabs with card integration -->
+  <b-modal :id="id" :ref="id" title="Create Candidate" size="custome">
     <b-card no-body>
-      <b-tabs v-model="tabIndex" small card>
+      <b-tabs v-model="tabIndex" card>
         <b-tab title="Candidate Info" active>
           <b-container fluid>
             <b-form>
               <b-row>
+                <b-col cols="12" v-if="courseCode === null">
+                  <b-form-group
+                    id="input-group-courseCode"
+                    label="Course code"
+                    label-for="input-courseCode"
+                  >
+                    <b-form-select
+                      id="input-courseCode"
+                      v-model="candidate.courseCode"
+                      :options="courseCodes"
+                      required
+                    ></b-form-select>
+                  </b-form-group>
+                </b-col>
                 <b-col cols="12">
                   <b-form-group
                     id="input-group-candidateName"
                     label="Name"
                     label-for="input-candidateName"
                   >
-                    <b-form-input id="input-candidateName" type="text" required></b-form-input>
+                    <b-form-input
+                      id="input-candidateName"
+                      v-model="candidate.name"
+                      type="text"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="12">
+                  <b-form-group id="input-group-account" label="Account" label-for="input-account">
+                    <b-form-input
+                      id="input-account"
+                      v-model="candidate.account"
+                      type="text"
+                      required
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" md="6">
@@ -22,7 +50,12 @@
                     label="Nation ID"
                     label-for="input-candidateNationId"
                   >
-                    <b-form-input id="input-candidateNationId" type="text" required></b-form-input>
+                    <b-form-input
+                      id="input-candidateNationId"
+                      v-model="candidate.nationalId"
+                      type="text"
+                      required
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" md="6">
@@ -31,7 +64,11 @@
                     label="Gender"
                     label-for="input-candidateGender"
                   >
-                    <b-form-select id="input-candidateGender" :options="genders"></b-form-select>
+                    <b-form-select
+                      id="input-candidateGender"
+                      v-model="candidate.gender"
+                      :options="genders"
+                    ></b-form-select>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" md="6">
@@ -40,25 +77,34 @@
                     label="University"
                     label-for="input-candidateUniversity"
                   >
-                    <b-form-select id="input-candidateUniversity" :options="universities"></b-form-select>
+                    <b-form-select
+                      id="input-candidateUniversity"
+                      v-model="candidate.universityName"
+                      :options="suppliers"
+                    ></b-form-select>
                   </b-form-group>
                 </b-col>
-                <!-- <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateFaculty"
-                    label="Faculty"
-                    label-for="input-candidateFaculty"
-                  >
-                    <b-form-select id="input-candidateFaculty" :options="faculties"></b-form-select>
+                <b-col cols="12" md="6">
+                  <b-form-group id="input-group-Faculty" label="Faculty" label-for="input-Faculty">
+                    <b-form-select
+                      id="input-Faculty"
+                      v-model="candidate.facultyName"
+                      :options="faculties"
+                    ></b-form-select>
                   </b-form-group>
-                </b-col> -->
+                </b-col>
                 <b-col cols="12" md="6">
                   <b-form-group
                     id="input-group-candidateEmail"
                     label="Email"
                     label-for="input-candidateEmail"
                   >
-                    <b-form-input id="input-candidateEmail" type="email" required></b-form-input>
+                    <b-form-input
+                      id="input-candidateEmail"
+                      v-model="candidate.email"
+                      type="email"
+                      required
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" md="6">
@@ -67,7 +113,12 @@
                     label="Phone"
                     label-for="input-candidatePhone"
                   >
-                    <b-form-input id="input-candidatePhone" type="tel" required></b-form-input>
+                    <b-form-input
+                      id="input-candidatePhone"
+                      v-model="candidate.phone"
+                      type="tel"
+                      required
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" md="6">
@@ -76,7 +127,12 @@
                     label="Date Of Birth"
                     label-for="input-candidateDateOfBirth"
                   >
-                    <b-form-input id="input-candidateDateOfBirth" type="date" required></b-form-input>
+                    <b-form-input
+                      id="input-candidateDateOfBirth"
+                      v-model="candidate.dayOfBirth"
+                      type="date"
+                      required
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" md="6">
@@ -85,16 +141,25 @@
                     label="Graduation Date"
                     label-for="input-candidateGraduationDate"
                   >
-                    <b-form-input id="input-candidateGraduationDate" type="date" required></b-form-input>
+                    <b-form-input
+                      id="input-candidateGraduationDate"
+                      v-model="candidate.graduationDate"
+                      type="number"
+                      required
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
-                 <b-col cols="12" md="6">
+                <b-col cols="12" md="6">
                   <b-form-group
                     id="input-group-candidateFullTimeWorking"
                     label="Full Time Working"
                     label-for="input-candidateFullTimeWorking"
                   >
-                    <b-form-input id="input-candidateFullTimeWorking" type="text" />
+                    <b-form-input
+                      id="input-candidateFullTimeWorking"
+                      v-model="candidate.fullTimeWorking"
+                      type="date"
+                    />
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" md="6">
@@ -103,7 +168,7 @@
                     label="GPA"
                     label-for="input-candidateGPA"
                   >
-                    <b-form-input id="input-candidateGPA" type="text" />
+                    <b-form-input id="input-candidateGPA" v-model="candidate.gpa" type="text" />
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" md="6">
@@ -112,42 +177,54 @@
                     label="Skill"
                     label-for="input-candidateSkill"
                   >
-                    <b-form-select id="input-candidateSkill" :options="skill"></b-form-select>
+                    <b-form-select
+                      id="input-candidateSkill"
+                      v-model="candidate.skill"
+                      :options="subSubjects"
+                    ></b-form-select>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="12" md="6">
+                  <b-form-group
+                    id="input-group-candidateFacebook"
+                    label="Facebook"
+                    label-for="input-candidateFacebook"
+                  >
+                    <b-form-input
+                      id="input-candidateFacebook"
+                      v-model="candidate.facebook"
+                      :options="skills"
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
               </b-row>
             </b-form>
           </b-container>
+          <b-container fluid>
+            <b-row>
+              <b-col cols="12">
+                <div class="bg-white rounded-5 p-3 text-center">
+                  <b-spinner style="width: 3rem; height: 3rem;" label="Loading"></b-spinner>
+                </div>
+              </b-col>
+            </b-row>
+          </b-container>
         </b-tab>
-        <b-tab title="Training Info" v-bind:disabled="tabDisabled">
+        <b-tab title="Training Info">
           <b-container fluid>
             <b-form>
               <b-row>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateFromDate"
-                    label="From Date"
-                    label-for="input-candidateFromDate"
-                  >
-                    <b-form-input id="input-candidateFromDate" type="date" required></b-form-input>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateToDate"
-                    label="To Date"
-                    label-for="input-candidateToDate"
-                  >
-                    <b-form-input id="input-candidateToDate" type="date" required></b-form-input>
-                  </b-form-group>
-                </b-col>
                 <b-col cols="12" md="6">
                   <b-form-group
                     id="input-group-candidateStatus"
                     label="Status"
                     label-for="input-candidateStatus"
                   >
-                    <b-form-select id="input-candidateStatus" :options="status"></b-form-select>
+                    <b-form-select
+                      id="input-candidateStatus"
+                      v-model="candidate.candidateStatus"
+                      :options="status"
+                    ></b-form-select>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" md="6">
@@ -156,16 +233,25 @@
                     label="Final grade"
                     label-for="input-candidateFinalGrade"
                   >
-                    <b-form-input id="input-candidateFinalGrade" type="text" required></b-form-input>
+                    <b-form-input
+                      v-model="candidate.finalGrade"
+                      id="input-candidateFinalGrade"
+                      type="text"
+                      required
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" md="6">
                   <b-form-group
-                    id="input-group-candidateCompletionLevel"
-                    label="University"
-                    label-for="input-candidateCompletionLevel"
+                    id="input-group-candidateContractType"
+                    label="Contract Type"
+                    label-for="input-candidateContractType"
                   >
-                    <b-form-select id="input-candidateCompletionLevel" :options="completionLevel"></b-form-select>
+                    <b-form-select
+                      v-model="candidate.contractType"
+                      :options="contractTypes"
+                      id="input-candidateContractType"
+                    ></b-form-select>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" md="6">
@@ -174,173 +260,23 @@
                     label="Certificate ID"
                     label-for="input-candidateCertificateID"
                   >
-                    <b-form-input id="input-candidateCertificateID"></b-form-input>
+                    <b-form-input
+                      v-model="candidate.certificateId"
+                      id="input-candidateCertificateID"
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" md="6">
                   <b-form-group
-                    id="input-group-candidateUpdatedBy"
-                    label="Updated by"
-                    label-for="input-candidateUpdatedBy"
+                    id="input-group-candidateCompletionLevel"
+                    label="Completion Level"
+                    label-for="input-candidateCompletionLevel"
                   >
-                    <b-form-input id="input-candidateUpdatedBy" type="text" required></b-form-input>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateFromDate"
-                    label="From date"
-                    label-for="input-candidateFromDate"
-                  >
-                    <b-form-input id="input-candidateFromDate" type="text" required></b-form-input>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12">
-                  <b-form-group
-                    id="input-group-candidateNote"
-                    label="Note"
-                    label-for="input-candidateNote"
-                  >
-                    <b-form-input id="input-candidateNote" type="text" required></b-form-input>
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </b-form>
-          </b-container>
-        </b-tab>
-        <!-- <b-tab title="GST follow-up">
-          <b-container>
-            <b-form>
-              <b-row>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateReCer"
-                    label="RECer"
-                    label-for="input-candidateReCer"
-                  >
-                    <b-form-input id="input-candidateReCer" type="text" />
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateGSTStatus"
-                    label="RECer"
-                    label-for="input-candidateGSTStatus"
-                  >
-                    <b-form-select id="input-candidateGSTStatus" :options="GSTstatus"></b-form-select>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateCVNumber"
-                    label="CV number"
-                    label-for="input-candidateGSTStatus"
-                  >
-                    <b-form-input id="input-candidateCVNumber" type="text"></b-form-input>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateContractType"
-                    label="1st contract Type"
-                    label-for="input-candidateContractType"
-                  >
-                    <b-form-select id="input-candidateContractType" :options="contractType"></b-form-select>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12">
-                  <b-form-group
-                    id="input-group-candidateGSTNote"
-                    label="Note"
-                    label-for="input-candidateGSTNote"
-                  >
-                    <b-form-textarea
-                      id="input-candidateGSTNote"
-                      v-model="text"
-                      placeholder="Enter something..."
-                      rows="2"
-                    ></b-form-textarea>
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </b-form>
-          </b-container>
-        </b-tab>
-        <b-tab title="Transfer">
-          <b-container>
-            <b-form>
-              <b-row>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateUniHotKey"
-                    label="Uni Hot_key *"
-                    label-for="input-candidateUniHotKey"
-                  >
-                    <b-form-input id="input-candidateUniHotKey" type="text" />
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateTier"
-                    label="Tier"
-                    label-for="input-candidateTier"
-                  >
-                    <b-form-input id="input-candidateTier" type="text" />
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateEventType"
-                    label="Event Type"
-                    label-for="input-candidateEventType"
-                  >
-                    <b-form-select id="input-candidateEventType" :options="eventType"></b-form-select>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateEventName"
-                    label="Event Name"
-                    label-for="input-candidateEventName"
-                  >
-                    <b-form-input id="input-candidateEventName" type="text"></b-form-input>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateSkill"
-                    label="Skill"
-                    label-for="input-candidateSkill"
-                  >
-                    <b-form-select id="input-candidateSkill" :options="skill"></b-form-select>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateMailMerge"
-                    label="Mail Merge"
-                    label-for="input-candidateMailMerge"
-                  >
-                    <b-form-input id="input-candidateMailMerge" type="text" />
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidate"
-                    label="Feedback Status *"
-                    label-for="input-candidateFeedbackStatus"
-                  >
-                    <b-form-input id="input-candidateFeedbackStatus" type="text" />
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6">
-                  <b-form-group
-                    id="input-group-candidateGPA"
-                    label="GPA"
-                    label-for="input-candidateGPA"
-                  >
-                    <b-form-input id="input-candidateGPA" type="text" />
+                    <b-form-select
+                      v-model="candidate.completionLevel"
+                      :options="completionLevel"
+                      id="input-candidateCompletionLevel"
+                    ></b-form-select>
                   </b-form-group>
                 </b-col>
 
@@ -351,98 +287,193 @@
                     label-for="input-candidateTransferNote"
                   >
                     <b-form-textarea
+                      v-model="candidate.note"
                       id="input-candidateTransferNote"
-                      v-model="text"
                       placeholder="Enter something..."
-                      rows="2"
+                      rows="12"
                     ></b-form-textarea>
                   </b-form-group>
                 </b-col>
               </b-row>
             </b-form>
           </b-container>
-        </b-tab>-->
+          <b-container fluid>
+            <b-row>
+              <b-col cols="12">
+                <div class="bg-white rounded-5 p-3 text-center">
+                  <b-spinner style="width: 3rem; height: 3rem;" label="Loading"></b-spinner>
+                </div>
+              </b-col>
+            </b-row>
+          </b-container>
+        </b-tab>
       </b-tabs>
     </b-card>
-
-    <!-- Control buttons-->
-    <div class="text-center">
-      <b-button-group class="mt-2">
-        <b-button  variant="light" @click="tabIndex--" >Cancel</b-button>
-        <b-button @click="enableTrainingTab" variant="primary"  v-if="tabIndex == 0">Continue</b-button>
-        <b-button variant="success" v-if="tabIndex == 1">Save</b-button>
-      </b-button-group>
-
-      <!-- <div class="text-muted">Current Tab: {{ tabIndex }}</div> -->
-    </div>
-  </div>
+    <template slot="modal-footer" slot-scope="{ cancel }">
+      <div class="d-flex justify-content-center w-200 fixed-bottom sticky-top">
+        <b-button @click="cancel()" variant="light">Cancel</b-button>
+        <b-button variant="success" v-if="tabIndex == 0" class="ml-3">Save Info</b-button>
+        <b-button v-if="tabIndex == 1" variant="success" class="shadow ml-3">Save section</b-button>
+      </div>
+    </template>
+  </b-modal>
 </template>
+
 
 <script>
 export default {
+  props: {
+    id: String,
+    courseCode: {
+      type: String,
+      default: null
+    }
+  },
+  mounted() {
+    this.loadAllCourseCode();
+  },
   data() {
     return {
+      candidate: {
+        contractType: "No contract",
+        candidateStatus: "Active",
+        universityName: "ĐH Nông Lâm TP HCM",
+        facultyName: "Công nghệ thông tin",
+        account: "",
+        email: "",
+        nationalId: "0",
+        name: "",
+        gpa: 0
+      },
       tabDisabled: true,
       tabIndex: 0,
+      skills: [],
       genders: [
-        { value: "male", text: "Male" },
-        { value: "female", text: "Female" }
+        { value: "Male", text: "Male" },
+        { value: "Female", text: "Female" }
       ],
-      universities: [{ value: "fu", text: "FPT University" }],
-      faculties: [{ value: "ict", text: "ICT" }],
+      suppliers: [],
+      subSubjects: [],
+      faculties: [],
       status: [
-        { value: "active", text: "Active" },
-        { value: "passed", text: "Passed" }
+        { value: "Active", text: "Active" },
+        { value: "Done", text: "Done" },
+        { value: "Failed", text: "Failed" },
+        { value: "Passed", text: "Passed" }
       ],
       completionLevel: [
-        {
-          value: "a",
-          text: "A"
-        },
-        {
-          value: "b",
-          text: "B"
-        },
-        {
-          value: "c",
-          text: "C"
-        },
-        {
-          value: "d",
-          text: "D"
-        },
-        {
-          value: "e",
-          text: "E"
-        }
+        { value: "1", text: "1" },
+        { value: "2", text: "2" },
+        { value: "3", text: "3" }
       ],
       GSTstatus: [{ value: "transfer", text: "Transfer" }],
-      contractType: [{ value: "1st contract Type", text: "1st contract Type" }],
+      contractTypes: [
+        {
+          value: "Fresher Training Contract",
+          text: "Fresher Training Contract"
+        },
+        {
+          value: "On job training Contract",
+          text: "On job training Contract"
+        },
+        {
+          value: "Definite-term Labor Contract",
+          text: "Definite-term Labor Contract"
+        },
+        {
+          value: "Intern Contract",
+          text: "Intern Contract"
+        }
+      ],
       eventType: [
         {
-          value: "intership",
+          value: "Intership",
           text: "Intership"
         }
       ],
-      skill: [
-        { value: "java", text: "Java" },
-        { value: ".Net", text: ".Net" },
-        { value: "all", text: "All" }
-      ]
+      courseCodes: []
     };
   },
+  computed: {
+    courseCodesList() {
+      return this.$store.state.event.loadAllCourseCode;
+    },
+    universities() {
+      return this.$store.state.supplier.getSupplier;
+    },
+    subSubjectsType() {
+      return this.$store.state.subject.getSubSubject;
+    },
+    facultiesList() {
+      return this.$store.state.faculty.getFaculty;
+    }
+  },
   methods: {
-    // nextTab(position) {
-    //   this.showTab[position] = false;
-    //   this.tabIndex = position;
-    //   this.tabIndex = position;
-    // },
-     enableTrainingTab:function(){
-       this.tabIndex++;
-      this.tabDisabled = false;
-
-   },
- 
+    loadAllCourseCode() {
+      this.$store.dispatch("event/loadAllCourseCode");
+    },
+    getSupplier() {
+      this.$store.dispatch("supplier/getSupplier");
+    },
+    getSubSubjectType() {
+      this.$store.dispatch("subject/getSubSubject");
+    },
+    getFaculty() {
+      this.$store.dispatch("faculty/getFaculty");
+    }
+  },
+  watch: {
+    courseCodesList: {
+      handler() {
+        if (this.courseCodesList.data) {
+          this.courseCodes = this.courseCodesList.data.flatMap(code => {
+            return {
+              value: code,
+              text: code
+            };
+          });
+        }
+      }
+    },
+    universities: {
+      immediate: false,
+      handler() {
+        const universities = this.universities.data;
+        if (universities) {
+          this.suppliers = universities.flatMap(university => {
+            return {
+              value: university.universityName,
+              text: university.universityName
+            };
+          });
+        }
+      }
+    },
+    subSubjectsType: {
+      handler() {
+        const subSubjects = this.subSubjectsType.data;
+        if (subSubjects) {
+          this.subSubjects = subSubjects.flatMap(subSubject => {
+            return {
+              value: subSubject.subSubjectTypeName,
+              text: subSubject.subSubjectTypeName
+            };
+          });
+        }
+      }
+    },
+    facultiesList: {
+      handler() {
+        if (this.facultiesList.data) {
+          this.faculties = this.facultiesList.data.flatMap(faculty => {
+            return {
+              text: faculty.name,
+              value: faculty.name
+            };
+          });
+        }
+      }
+    }
   }
 };
 </script>

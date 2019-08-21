@@ -1,6 +1,6 @@
 <template>
   <b-modal :id="id" :ref="id" title="Edit Event">
-    <div class="overflow-auto">
+    <div>
       <b-form v-if="!updateEventState.updating">
         <div class="section section-Info">
           <div class="section-header mb-2">
@@ -108,7 +108,7 @@
               />
             </b-form-group>
             <b-form-group label="Note" label-for="editNote">
-              <b-form-input type="text" id="editNote" v-model="event.note" />
+              <b-form-textarea v-model="event.note"></b-form-textarea>
             </b-form-group>
           </div>
         </div>
@@ -142,34 +142,22 @@ export default {
   mixins: [ToastMixin],
   data() {
     return {
-      courses: [
-        { value: "Global Software Talent", text: "Global Software Talent" },
-        { value: "GST LITE", text: "GST LITE" },
-        { value: "INTERNSHIP", text: "INTERNSHIP" },
-        { value: "THESIS", text: "THESIS" },
-        { value: "FSOFT TOUR", text: "FSOFT TOUR" }
-      ],
-      suppliers: [
-        { value: "ĐH Công nghiệp TPHCM", text: "ĐH Công nghiệp TPHCM" },
-        { value: "ĐH FPT", text: "ĐH FPT" },
-        { value: "CĐ Kỹ thuật Cao Thắng", text: "CĐ Kỹ thuật Cao Thắng" }
-      ],
+      plan: {
+        start: null,
+        end: null
+      },
+      actual: {
+        start: null,
+        end: null
+      },
       subjects: [{ value: "IT Technical", text: "IT Technical" }],
-      subSubjects: [
-        { value: "NET", text: "NET" },
-        { value: "TEST", text: "TEST" },
-        { value: "JAVA", text: "JAVA" },
-        { value: "IOS", text: "IOS" },
-        { value: "ANDROID", text: "ANDROID" },
-        { value: "Đề tài tốt nghiệp", text: "Đề tài tốt nghiệp" },
-        { value: "AI&ML", text: "AI&ML" },
-        { value: "EMBED", text: "EMBED" },
-        { value: "ALL", text: "ALL" }
-      ],
       formats: [
         { value: "Blended", text: "Blended" },
         { value: "Offline", text: "Offline" }
-      ]
+      ],
+      suppliers: [],
+      subSubjects: [],
+      courses: []
     };
   },
   methods: {
@@ -177,8 +165,11 @@ export default {
      *
      */
     updateEvent(event) {
-      event = this.formatDay("D-MMM-YYYY", event);
-      //console.log(event);
+      this.formatDay("D-MMM-YYYY", event);
+      console.log(
+        (event.changeYear = this.checkChangeYear(event.plannedStartDate))
+      );
+
       this.$store.dispatch("event/updateEvent", event);
     },
 
@@ -186,13 +177,17 @@ export default {
      *
      */
     formatDay(patern, event) {
-      // format time to send to server
-      //this.moment(event.actualStartDate).format(patern);
       event.actualStartDate = this.formatDate(event.actualStartDate, patern);
       event.actualEndDate = this.formatDate(event.actualEndDate, patern);
       event.plannedStartDate = this.formatDate(event.plannedStartDate, patern);
       event.plannedEndDate = this.formatDate(event.plannedEndDate, patern);
       return event;
+    },
+
+    checkChangeYear(planDate) {
+      const planYear = this.formatDate(planDate, "YYYY");
+      const currentYear = this.formatDate(this.plan.start, "YYYY");
+      return currentYear < planYear;
     }
   },
   computed: {
@@ -201,18 +196,88 @@ export default {
      */
     updateEventState() {
       return this.$store.state.event.updateEvent;
+    },
+
+    eventUpdate() {
+      return this.$store.state.event.event;
+    },
+
+    /**
+     *
+     */
+    universities() {
+      return this.$store.state.supplier.getSupplier;
+    },
+    subSubjectsType() {
+      return this.$store.state.subject.getSubSubject;
+    },
+    campuslinks() {
+      return this.$store.state.campuslink.getCampuslink;
     }
   },
   watch: {
+    event: {
+      handler() {
+        this.event = this.formatDay("YYYY-MM-DD", this.event);
+        // store old datime
+        this.plan.start = this.event.plannedStartDate;
+        this.plan.end = this.event.plannedEndDate;
+        this.actual.start = this.event.actualStartDate;
+        this.actual.end = this.event.actualEndDate;
+      }
+    },
     updateEventState: {
       handler() {
+        this.formatDay("YYYY-MM-DD", this.event);
         if (this.updateEventState.updated === false) {
           this.showToast("Event cannot update", "Error", "danger");
         } else if (this.updateEventState.updated === true) {
           this.showToast("Event was updated", "Success", "success");
+          // close modal
           this.$bvModal.hide("modalEditEvent");
+          //send data to list
+          this.$emit("updateEvent", this.eventUpdate);
         }
-        this.formatDay("YYYY-MM-DD", this.event);
+      }
+    },
+    universities: {
+      immediate: false,
+      handler() {
+        const universities = this.universities.data;
+        if (universities) {
+          this.suppliers = universities.flatMap(university => {
+            return {
+              value: university.universityName,
+              text: university.universityName
+            };
+          });
+        }
+      }
+    },
+    subSubjectsType: {
+      handler() {
+        const subSubjects = this.subSubjectsType.data;
+        if (subSubjects) {
+          this.subSubjects = subSubjects.flatMap(subSubject => {
+            return {
+              value: subSubject.subSubjectTypeName,
+              text: subSubject.subSubjectTypeName
+            };
+          });
+        }
+      }
+    },
+    campuslinks: {
+      handler() {
+        const campuslinks = this.campuslinks.data;
+        if (campuslinks) {
+          this.courses = campuslinks.flatMap(campuslink => {
+            return {
+              value: campuslink.name,
+              text: campuslink.name
+            };
+          });
+        }
       }
     }
   }

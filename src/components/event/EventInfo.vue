@@ -812,7 +812,7 @@ export default {
      */
     updateEvent(event) {
       event = this.formatDay("D-MMM-YYYY", event);
-      console.log(event);
+      // console.log(event);
       this.$store.dispatch("event/updateEvent", event);
     },
 

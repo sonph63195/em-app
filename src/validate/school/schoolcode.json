@@ -1,0 +1,187 @@
+[
+  {
+    "site": "HCM",
+    "universityName": "FPT Software Hồ Chí Minh",
+    "universityCode": "HCM.FSO",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "Nhiều Trường",
+    "universityCode": "HCM.MIX",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Nông Lâm TP HCM",
+    "universityCode": "HCM.UAF",
+    "uniHotKey": "538",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Sư phạm Kỹ thuật HCM ( Điện điện tử)",
+    "universityCode": "HCM.HCMUTE",
+    "uniHotKey": "320",
+    "facultyCode": "SET"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Sư phạm Kỹ thuật HCM (CNTT)",
+    "universityCode": "HCM.HCMUTE",
+    "uniHotKey": "320",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Bách khoa HCM",
+    "universityCode": "HCM.HCMUT",
+    "uniHotKey": "305",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH QG HCM - ĐH KHTN ( Toán & Tin )",
+    "universityCode": "HCM.HCMUS",
+    "uniHotKey": "307",
+    "facultyCode": "MAT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH QG HCM - ĐH KHTN ( CNTT)",
+    "universityCode": "HCM.HCMUS",
+    "uniHotKey": "307",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Sư phạm HCM",
+    "universityCode": "HCM.HCMUP",
+    "uniHotKey": "321",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Cần Thơ",
+    "universityCode": "HCM.CTU",
+    "uniHotKey": "532",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "Cao Đẳng thực hành Fpoly",
+    "universityCode": "HCM.POLY",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Tôn Đức Thắng",
+    "universityCode": "HCM.TDT",
+    "uniHotKey": "548",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Công Nghệ TP HCM",
+    "universityCode": "HCM.HUTECH",
+    "uniHotKey": "530",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Nguyễn Tất Thành",
+    "universityCode": "HCM.NTT",
+    "uniHotKey": "540",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH - Học Viện Bưu Chính Viễn Thông HCM",
+    "universityCode": "HCM.PTIT",
+    "uniHotKey": "333",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "Cao Đẳng Thủ Đức",
+    "universityCode": "HCM.TDC",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Công nghiệp TPHCM",
+    "universityCode": "HCM.IUH",
+    "uniHotKey": "284",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Công Nghệ Thông Tin, ĐH Quốc gia TP HCM (KTMT)",
+    "universityCode": "HCM.UIT",
+    "uniHotKey": "304",
+    "facultyCode": "ICT-CE"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Công Nghệ Thông Tin, ĐH Quốc gia TP HCM (KTPM)",
+    "universityCode": "HCM.UIT",
+    "uniHotKey": "304",
+    "facultyCode": "ICT-SE"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Ngoại Ngữ - Tin Học TP HCM",
+    "universityCode": "HCM.HUFLIT",
+    "uniHotKey": "539",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Lạc Hồng",
+    "universityCode": "HCM.LHU",
+    "uniHotKey": "536",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "Đại học Thủ Dầu Một",
+    "universityCode": "HCM.TDMU",
+    "uniHotKey": "458",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH FPT",
+    "universityCode": "HCM.FU",
+    "uniHotKey": "047",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Mở HCM",
+    "universityCode": "HCM.OU",
+    "uniHotKey": "298",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Giao thông vận tải HCM",
+    "universityCode": "HCM.UCT",
+    "uniHotKey": "288",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "CĐ Kỹ thuật Cao Thắng",
+    "universityCode": "HCM.CTTC",
+    "uniHotKey": "267",
+    "facultyCode": "ICT"
+  },
+  {
+    "site": "HCM",
+    "universityName": "ĐH Sài Gòn",
+    "universityCode": "HCM.SGU",
+    "uniHotKey": "318",
+    "facultyCode": "ICT"
+  }
+]

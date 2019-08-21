@@ -19,9 +19,21 @@ export const event = {
         },
         eventsWeek: {
             state: { loading: false }
+        },
+        createEventFromManual: {
+            state: { loading: false },
+            data: {}
+        },
+        loadAllCourseCode: {
+            state: { loading: false },
+            data: []
         }
     },
     mutations: {
+        /**
+         * 
+         * @param {*} state 
+         */
         getEventRequest(state) {
             state.getEvent = { loading: true }
             state.events = [];
@@ -33,6 +45,11 @@ export const event = {
         getEventFailure(state) {
             state.getEvent = { loaded: false }
         },
+
+        /**
+         * 
+         * @param {*} state 
+         */
         cancelEventRequest(state) {
             state.cancelEvent = { loading: true }
         },
@@ -42,6 +59,11 @@ export const event = {
         cancelEventFailure(state, status) {
             state.cancelEvent = { success: false, status: status }
         },
+
+        /**
+         * 
+         * @param {*} state 
+         */
         getEventByIdRequest(state) {
             state.getEventById = { loading: true }
         },
@@ -52,6 +74,11 @@ export const event = {
         getEventByIdFailure(state) {
             state.getEventById = { loaded: false }
         },
+
+        /**
+         * 
+         * @param {*} state 
+         */
         updateEventRequest(state) {
             state.updateEvent = { updating: true }
         },
@@ -62,6 +89,11 @@ export const event = {
         updateEventFailure(state) {
             state.updateEvent = { updated: false }
         },
+
+        /**
+         * 
+         * @param {*} state 
+         */
         eventRecentRequest(state) {
             state.eventRecent = {
                 state: { loading: true }
@@ -78,6 +110,11 @@ export const event = {
                 state: { loaded: false }
             }
         },
+
+        /**
+         * 
+         * @param {*} state 
+         */
         eventsMonthRequest(state) {
             state.eventsMonth = {
                 state: { loading: true }
@@ -95,6 +132,10 @@ export const event = {
             }
         },
 
+        /**
+         * 
+         * @param {*} state 
+         */
         eventsWeekRequest(state) {
             state.eventsWeek = {
                 state: { loading: true }
@@ -110,7 +151,51 @@ export const event = {
             state.eventsWeek = {
                 state: { loaded: false }
             }
-        }
+        },
+
+        /**
+         * 
+         * @param {*} state 
+         */
+        createEventFromManualRequest(state) {
+            state.createEventFromManual = {
+                state: { loading: true }
+            }
+        },
+        createEventFromManualSuccess(state, data) {
+            state.createEventFromManual = {
+                state: { success: true },
+                data: data
+            }
+        },
+        createEventFromManualFailure(state, error) {
+            state.createEventFromManual = {
+                state: { success: false },
+                data: error
+            }
+        },
+
+        /**
+         * 
+         * @param {*} state 
+         */
+        loadAllCourseCodeRequest(state) {
+            state.loadAllCourseCode = {
+                state: { loading: true }
+            }
+        },
+        loadAllCourseCodeSuccess(state, data) {
+            state.loadAllCourseCode = {
+                state: { loaded: true },
+                data: data
+            }
+        },
+        loadAllCourseCodeFalure(state, error) {
+            state.loadAllCourseCode = {
+                state: { loaded: false },
+                data: error
+            }
+        },
     },
     actions: {
         getEvent({ commit }, pageNumber) {
@@ -184,6 +269,30 @@ export const event = {
                 commit("eventsWeekSuccess", success.body);
             }, () => {
                 commit("eventsWeekFailure");
+            })
+        },
+
+        createEventFromManual({ commit }, { event }) {
+            commit("createEventFromManualRequest");
+            eventService.createEventFromManual(event).then(success => {
+                if (success.body.status === 200) {
+                    commit("createEventFromManualSuccess", success.body);
+                } else {
+                    commit("createEventFromManualFailure", success.body);
+                }
+            }, error => {
+                commit("createEventFromManualFailure", error);
+                // eslint-disable-next-line no-console
+                console.log(error);
+            })
+        },
+
+        loadAllCourseCode({ commit }) {
+            commit("loadAllCourseCodeRequest");
+            eventService.loadAllCourseCode().then(success => {
+                commit("loadAllCourseCodeSuccess", success.body);
+            }, error => {
+                commit("loadAllCourseCodeFailure", error.body)
             })
         }
     }

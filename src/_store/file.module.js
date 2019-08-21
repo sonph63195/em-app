@@ -47,8 +47,9 @@ export const file = {
         removeFile({ commit }) {
             commit('removeFile')
         },
+
         convertJson({ commit }, worksheet) {
-            fileService.convertJson(worksheet).then(data => {
+            fileService.readEventFromExcel(worksheet).then(data => {
                 commit('convertJsonSuccess', data);
             })
         }

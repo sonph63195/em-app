@@ -30,8 +30,7 @@
       </div>
     </b-col>
     <b-col cols="12" md="10">
-      <hot-table :settings="hotSettings">
-      </hot-table>
+      <b-table class="border 1" striped hover :items="items" :fields="fields"></b-table>
     </b-col>
     
   </b-row>
@@ -39,10 +38,8 @@
 
 <script>
 import "handsontable/dist/handsontable.full.css";
-import HotTable from "@handsontable/vue";
 export default {
   components: {
-    HotTable,
   },
   data() {
     return {
@@ -55,16 +52,14 @@ export default {
         statust_2: "Fresher",
         number: 80
       },
-      hotSettings:{
-        data:[
-        ["1","Nguyen Thi Hong Nhung","nhunnhun.abc@gmail.com","FU","Female"],
-        ["2","Bui Quoc Khanh","quockhanh.abc@gmail.com","FU","Male"],
-        ["3","Pham Hoang Son","hoangson.abc@gmail.com","FU","Male"],
-        ["4","Nguyen Thi Hong Anh","honganh.abc@gmail.com","FU","Female"],
-        ],
-        columnSorting: true,
-        colHeaders: ["No", "Student Name", "Account", "University", "Gender"]
-      },
+      fields: ["No", "Student_Name","Account", "University", "Gender"],
+      items: [
+        { No:"1", Student_Name: "Nguyen Thi Hong Nhung",Account:"nhunnhun.abc@gmail.com",University:"FU" ,Gender:"Female"},
+        { No:"2", Student_Name: "Bui Quoc Khanh",Account:"nhunnhun.abc@gmail.com",University:"FU" ,Gender:"Female"},
+        { No:"3", Student_Name: "Nguyen Thi Hong Nhung",Account:"nhunnhun.abc@gmail.com",University:"FU" ,Gender:"Female"},
+        { No:"4", Student_Name: "Nguyen Thi Hong Nhung",Account:"nhunnhun.abc@gmail.com",University:"FU" ,Gender:"Female"},
+        { No:"5", Student_Name: "Nguyen Thi Hong Nhung",Account:"nhunnhun.abc@gmail.com",University:"FU" ,Gender:"Female"},
+      ]
     };
   }
 };

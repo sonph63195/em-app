@@ -1,0 +1,46 @@
+export function makeEventSchema(joi) {
+  const schema = {
+    'A': joi.string().only(joi.ref('$listSite')).label('[A]Site').trim(),
+    'B': joi.string().only(joi.ref('$courseCode')).label('[B]Course Code').trim(),
+    'C': joi.string().only(joi.ref('$listCampuslinkProgram')).label('[C]Campuslink Program').trim(),
+    'D': joi.string().trim().only(joi.ref('$listSubjectType')).label('[D]Subject Type'),
+    'E': joi.string().trim().only(joi.ref('$listSubSubjectType')).label('[E]Sub-Subject Type'),
+    'F': joi.string().trim().only(joi.ref('$listFormatType')).label('[F]Format Type'),
+    'G': joi.string().trim().only(joi.ref('$listNameUniversity')).label('[G]Supplier/Partner'),
+    'H': joi.date().max(joi.ref('I')).required().label('[H]Planned start date').format('DD-MMM-YYYY').raw(true),
+    'I': joi.date().min(joi.ref('H')).required().label('[I]Planned end date').format('DD-MMM-YYYY').raw(true),
+    'J': joi.number().min(0).unit('Hour').label('[J]Planned Learning Time').integer(),
+    'K': joi.number().min(0).unit('Student').label('[K]Planned number of students').integer(),
+    'L': joi.number().min(0).unit('Vnd').label('[L]Planned Expense').optional(),
+    'M': joi.string().allow('').optional().label('[M]Budget code'),
+    'N': joi.date().max(joi.ref('O')).required().label('[N]Actual Start Date').format('DD-MMM-YYYY').raw(true),
+    'O': joi.date().min(joi.ref('N')).required().label('[O]Actual End Date').format('DD-MMM-YYYY').raw(true),
+    'P': joi.number().unit('Hour').label('[P]Actual Learning Time').min(0),
+    'Q': joi.number().label('[Q]Actual Number of trainees').unit('Trainee').min(0),
+    'R': joi.number().label('[R]Number of enrolled students').unit('Student').min(0),
+    'S': joi.number().label('[S]Number of Certified Students').unit('Student').min(0),
+    'T': joi.number().label('[T]Actual Expense').unit('Vnd').min(0).optional(),
+    'U': joi.string().allow('').optional().label('[U]Trainning feed back'),
+    'V': joi.string().allow('').optional().label('[V]Training feedback - Content'),
+    'W': joi.string().allow('').optional().label('[W]Training feedback - Teacher'),
+    'X': joi.string().allow('').optional().label('[X]Training feedback - Organization'),
+    /**
+     * @todo check both updated by & Updated date at one time
+     */
+    'Y': joi.string().optional().label('[Y]Updated by'),
+    'Z': joi.date().format('DD-MMM-YYYY').optional().label('[Z]Updated date'),
+    'AA': joi.string().allow('').label('[AA]Note').optional(),
+    'AB': joi.date().label('[AB]Start Date').max(joi.ref('AC')).format('DD-MMM-YYYY').raw(true),
+    'AC': joi.date().label('[AC]End date').min(joi.ref('AB')).format('DD-MMM-YYYY').raw(true),
+    'AD': joi.number().min(0).optional().unit('Hours').label('[AD]Learning time'),
+    'AE': joi.number().min(0).optional().unit('Student').label('[AE]Number of Students'),
+    'AF': joi.number().min(0).optional().unit('Vnd').label('[AF]Expense'),
+    'AG': joi.string().only('Done').label('[AG]Course Status'),
+    'AH': joi.number().label('[AH]Start Year').min(0).max(joi.ref('AJ')).raw(true),
+    'AI': joi.number().min(1).max(12).label('[AI]Start Month').raw(true),
+    'AJ': joi.number().min(joi.ref('AH')).label('[AJ]End Year').raw(true),
+    'AK': joi.number().min(1).max(12).label('[AK]End Month').raw(true),
+    'AL': joi.any().optional().label('[A]Student List Check'),
+  }
+  return schema;
+}

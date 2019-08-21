@@ -5,7 +5,11 @@ export const candidate = {
     candidates: [],
     candidate: {},
     getCandidate: { loading: false },
-    getCandidateById: { loading: false }
+    getCandidateById: { loading: false },
+    updateCandidate: {
+      state: { loading: false },
+      data: []
+    }
   },
   mutations: {
     getCandidateRequest(state) {
@@ -28,8 +32,24 @@ export const candidate = {
     },
     getCandidateByIdFailure(state) {
       state.getCandidateById = { loaded: false }
+    },
+    updateCandidateRequest(state) {
+      state.updateCandidate = {
+        state: { loading: true }
+      }
+    },
+    updateCandidateSuccess(state, data) {
+      state.updateCandidate = {
+        state: { success: true },
+        data: data
+      }
+    },
+    updateCandidateFailure(state, error) {
+      state.updateCandidate = {
+        state: { success: false },
+        data: error
+      }
     }
-
   },
   actions: {
     getCandidate({ commit }, pageNumber) {
@@ -54,6 +74,18 @@ export const candidate = {
           console.error(error);
         }
       )
+    },
+    updateCandidateInfo({ commit }, { candidate }) {
+      commit("updateCandidateRequest")
+      candidateService.updateCandidateInfo(candidate).then(success => {
+        if (success.body.status === "200") {
+          commit("updateCandidateSuccess", success.body)
+        } else {
+          commit("updateCandidateFailure", success.body)
+        }
+      }, error => {
+        commit("updateCandidateFailure", error.body)
+      })
     }
   }
 }

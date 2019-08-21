@@ -291,22 +291,61 @@ export default {
       edited: false,
       info: true,
       tabIndex: 0,
-      genders: [
-        { value: null, text: "Other" },
-        { value: "Male", text: "Male" },
-        { value: "Female", text: "Female" }
-      ],
+      tabDisabled: true,
+      skills: {
+        selected: "all",
+        options: [
+          { value: "java", text: "Java" },
+          { value: ".Net", text: ".Net" },
+          { value: "all", text: "All" }
+        ]
+      },
+      genders: {
+        selected: "male",
+        options: [
+          { value: "male", text: "Male" },
+          { value: "female", text: "Female" }
+        ]
+      },
+      supplier: {
+        selected: "ĐH FPT",
+        options: []
+      },
       faculties: [{ value: "ict", text: "ICT" }],
       status: [
         { value: "active", text: "Active" },
         { value: "passed", text: "Passed" }
       ],
-      skills: [
-        { value: "java", text: "Java" },
-        { value: ".Net", text: ".Net" },
-        { value: "all", text: "All" }
+      completionLevel: [
+        {
+          value: "a",
+          text: "A"
+        },
+        {
+          value: "b",
+          text: "B"
+        },
+        {
+          value: "c",
+          text: "C"
+        },
+        {
+          value: "d",
+          text: "D"
+        },
+        {
+          value: "e",
+          text: "E"
+        }
       ],
-      currentCandidate: null
+      GSTstatus: [{ value: "transfer", text: "Transfer" }],
+      contractType: [{ value: "1st contract Type", text: "1st contract Type" }],
+      eventType: [
+        {
+          value: "intership",
+          text: "Intership"
+        }
+      ]
     };
   },
   created() {
@@ -318,7 +357,6 @@ export default {
       handler() {
         this.$nextTick(() => {
           this.currentCandidate = this.candidate;
-          console.log(this.currentCandidate);
         });
       }
     }

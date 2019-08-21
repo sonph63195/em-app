@@ -32,7 +32,7 @@
               <!-- Using 'button-content' slot -->
               <template slot="button-content">
                 <div class="d-flex align-items-stretch">
-                  <span class="align-self-center">Alex Bob</span>
+                  <span class="align-self-center">{{ username }}</span>
                   <span width="36" height="36" class="bg-dark rounded-circle overflow-hinden ml-2">
                     <img width="36" height="36" src="@/assets/Logo.svg" alt />
                   </span>
@@ -40,7 +40,7 @@
               </template>
               <b-dropdown-item to="/setting-university">School code</b-dropdown-item>
               <b-dropdown-item to="/setting-param">Param</b-dropdown-item>
-              <b-dropdown-item to="/logout">
+              <b-dropdown-item @click="logout">
                 <span class="text-danger">
                   <font-awesome-icon icon="sign-out-alt" class="mr-3" />Sign Out
                 </span>
@@ -56,9 +56,21 @@
 <script>
 import MenuList from "./MenuList";
 
+import { cookies } from "../../_helper";
+
 export default {
   components: {
     MenuList
+  },
+  computed: {
+    username() {
+      return cookies.get("username");
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("authenticate/logout");
+    }
   }
 };
 </script>

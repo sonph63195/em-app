@@ -14,6 +14,8 @@ import Statistic from '../components/statistic/Statistic';
 import Admin from '../components/Admin/Admin';
 import AdminEditProfile from '../components/Admin/AdminEditProfile';
 
+import { cookies } from "./cookies";
+
 Vue.use(Router);
 
 export const router = new Router({
@@ -56,4 +58,19 @@ export const router = new Router({
         { path: '/setting-param', name: 'param', component: Param },
         { path: '/setting-university', name: 'university', component: University },
     ],
+});
+
+router.beforeEach((to, from, next) => {
+    // redirect to login page if not loged in
+    // const pulicPages = ['/login']; // the list of public pages
+    // const authRequired = !pulicPages.includes(to.path); // find path not public pages
+    // const loggedIn = cookies.isKey("token");// will get user in cookies
+
+    // if (authRequired && !loggedIn) {
+    //     return next('/login');
+    // } else if (!authRequired && loggedIn) {
+    //     return next("/");
+    // }
+
+    next();
 });

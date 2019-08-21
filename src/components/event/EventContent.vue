@@ -96,20 +96,14 @@
                     </b-button>
                   </div>
                   <div class="flex-fill">
-                    <b-button v-b-tooltip.hover title="View candidate list" variant="light" block>
+                    <b-button
+                      @click="showCandidateList(event)"
+                      v-b-tooltip.hover
+                      title="View candidate list"
+                      variant="light"
+                      block
+                    >
                       <font-awesome-icon icon="users" />
-                    </b-button>
-                  </div>
-                </div>
-                <div class="d-flex flex-fill mt-lg-2">
-                  <div class="flex-fill">
-                    <b-button v-b-tooltip.hover title="Create candidate" variant="light" block>
-                      <font-awesome-icon icon="plus-circle" />
-                    </b-button>
-                  </div>
-                  <div class="flex-fill">
-                    <b-button v-b-tooltip.hover title="Import candidate" variant="light" block>
-                      <font-awesome-icon icon="file-import" />
                     </b-button>
                   </div>
                 </div>
@@ -120,13 +114,25 @@
       </b-card>
     </b-col>
     <EditEvent id="modalEditEvent" ref="popupEditEvent" :event="currentEvent" />
+    <ViewEvent
+      id="modalViewEvent"
+      ref="popupViewEvent"
+      v-on:showEditFromView="editEvent"
+      :event="currentEvent"
+    />
+    <EventCandidateList
+      v-bind:eventId="candidateList.eventId"
+      v-bind:courseCode="candidateList.courseCode"
+      v-bind:actualNumberOfTrainees="candidateList.actualNumberOfTrainees"
+    />
   </b-row>
 </template>
 
 
 <script>
+import EventCandidateList from "./EventCandidateList";
 import EditEvent from "./EditEvent";
-
+import ViewEvent from "./ViewEvent";
 import { EventStatusMixin, PopupMixin } from "../mixins";
 
 /* eslint-disable */
@@ -135,12 +141,19 @@ export default {
     checkedAll: Boolean
   },
   components: {
-    EditEvent
+    EditEvent,
+    ViewEvent,
+    EventCandidateList
   },
   mixins: [EventStatusMixin, PopupMixin],
   data() {
     return {
-      currentEvent: {}
+      currentEvent: {},
+      candidateList: {
+        eventId: "",
+        courseCode: "",
+        actualNumberOfTrainees: ""
+      }
     };
   },
   computed: {
@@ -175,16 +188,19 @@ export default {
      *
      */
     viewEventInfo(event) {
-      this.$router.push({
-        name: "eventInfoPage",
-        params: {
-          eventId: event.eventId
-        }
-      });
+      this.currentEvent = event;
+      this.$bvModal.show("modalViewEvent");
     },
     editEvent(event) {
       this.currentEvent = event;
       this.$bvModal.show("modalEditEvent");
+    },
+    showCandidateList(event) {
+      this.candidateList.eventId = event.eventId;
+      this.candidateList.actualNumberOfTrainees = event.actualNumberOfTrainees;
+      this.candidateList.courseCode = event.courseCode;
+      //
+      this.$bvModal.show("candidateList");
     }
   }
 };

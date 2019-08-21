@@ -2,10 +2,10 @@
   <div>
     <Header />
     <main class="mt-3">
-      <b-container>
-        <section class="candidate">
+      <b-container fluid>
+        <section class="candidate position-relative">
           <b-row class="candidate-header">
-            <b-col cols="12" class="mb-3 p-0 d-flex flex-column">
+            <b-col cols="12" class="mb-3 d-flex flex-column">
               <div class="main-action flex-1 d-flex flex-column flex-lg-row flex-lg-grow-0 w-100">
                 <b-button
                   variant="outline-success"
@@ -14,7 +14,7 @@
                 >
                   <font-awesome-icon icon="calendar-alt" class="mr-3" />Import Candidate
                 </b-button>
-                <b-button v-b-modal.modalPopover variant="primary" class="mb-3">
+                <b-button v-b-modal.modalCreateCandidate variant="primary" class="mb-3">
                   <font-awesome-icon icon="plus-circle" class="mr-3" />Create Candidate
                 </b-button>
               </div>
@@ -54,7 +54,7 @@
 
           <!-- Content -->
           <b-row class="candidate-content">
-            <b-col cols="12" class="mb-3 p-0 d-flex flex-column">
+            <b-col cols="12" class="mb-3 d-flex flex-column">
               <CandidateContentModal
                 v-on:getCandidates="getCandidates"
                 v-on:removeCandidate="removeCandidate"
@@ -64,7 +64,7 @@
           </b-row>
           <!-- End content -->
 
-          <b-row class="candidate-footer fixed-bottom sticky-top">
+          <b-row class="candidate-footer mx-0 fixed-bottom sticky-top">
             <b-col cols="12" class="bg-white rounded-5 mt-3 foot-nav-stick">
               <div class="d-flex align-items-center">
                 <div class="flex-fill d-flex align-items-center">
@@ -79,16 +79,7 @@
             </b-col>
           </b-row>
         </section>
-        <b-modal
-          id="modalPopover"
-          size="custome"
-          title="Create New Candidate"
-          ok-only
-          hide-footer
-          z="true"
-        >
-          <CreateCandidate />
-        </b-modal>
+        <CreateCandidate id="modalCreateCandidate" />
         <b-modal id="modalEdit" size="custome" title="Edit Candidate" ok-only></b-modal>
       </b-container>
     </main>

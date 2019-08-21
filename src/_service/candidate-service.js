@@ -2,7 +2,8 @@ import { request } from "../_helper"
 
 export const candidateService = {
     getCandidateList,
-    getCandidateById
+    getCandidateById,
+    updateCandidateInfo
 }
 
 /**
@@ -10,7 +11,7 @@ export const candidateService = {
  * @param {*} pageNumber 
  */
 function getCandidateList(pageNumber) {
-    return request.get(`candidates/${pageNumber}`);
+    return request.get(`sections/${pageNumber}`);
 }
 
 /**
@@ -19,4 +20,8 @@ function getCandidateList(pageNumber) {
  */
 function getCandidateById(candidateId) {
     return request.get(`candidate?candidateId=${candidateId}`);
+}
+
+function updateCandidateInfo(candidate) {
+    return request.put(`candidates`, candidate);
 }
