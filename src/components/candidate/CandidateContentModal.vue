@@ -12,14 +12,14 @@
         <template slot="HEAD_all" slot-scope="data">
           <div class="d-flex">
             <span class="align-self-center mr-2">
-              <b-form-checkbox @click="select">{{ data.label }}</b-form-checkbox>
+              <b-form-checkbox v-model="checkAll">{{ data.label }}</b-form-checkbox>
             </span>
           </div>
         </template>
 
         <!-- Create checkbox for allrow -->
         <template slot="all" slot-scope="data">
-          <b-form-checkbox v-model="data.item.isChosen" />
+          <b-form-checkbox v-model="data.item.isChosen">{{ data.index + 1 }}</b-form-checkbox>
         </template>
 
         <!-- Hidden label of action -->
@@ -122,7 +122,8 @@ export default {
         { key: "university", sortable: true, sortBy: "university" },
         "action"
       ],
-      currentCandidate: {}
+      currentCandidate: {},
+      checkAll: false
     };
   },
   computed: {
@@ -142,10 +143,6 @@ export default {
     }
   },
   methods: {
-    select() {
-      this.$refs.selectableTable.selectAllRows();
-    },
-
     eventActionButton(status) {
       return status === "Cancelled" || status === "Done";
     },
@@ -160,6 +157,15 @@ export default {
     editCandidate(candidate) {
       this.currentCandidate = candidate;
       this.$bvModal.show("modalCandidateEdit");
+    }
+  },
+  watch: {
+    checkAll: {
+      handler() {
+        this.candidates.forEach(candidate => {
+          candidate.isChosen = this.checkAll;
+        });
+      }
     }
   }
 };

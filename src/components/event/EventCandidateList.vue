@@ -29,7 +29,7 @@
           <template slot="HEAD_action">
             <div class="d-flex">
               <span class="align-self-center mr-2">
-                <b-form-checkbox>All</b-form-checkbox>
+                <b-form-checkbox v-model="checkAll">All</b-form-checkbox>
               </span>
             </div>
           </template>
@@ -37,7 +37,7 @@
           <template slot="candidateName" slot-scope="data">
             <div class="d-flex">
               <div class="align-self-center mr-2">
-                <div>{{ data.item.candidateName }}</div>
+                <div>{{ data.item.name }}</div>
                 <span
                   class="badge"
                   :class="'badge' + candidateStatusColor(data.item.candidateStatus)"
@@ -45,10 +45,13 @@
               </div>
             </div>
           </template>
+          <template slot="university" slot-scope="data">
+            <div>{{ data.item.universityName }}</div>
+          </template>
           <template slot="action" slot-scope="data">
             <div class="d-flex">
               <span class="align-self-center mr-2">
-                <b-form-checkbox></b-form-checkbox>
+                <b-form-checkbox v-model="data.item.isChosen"></b-form-checkbox>
               </span>
 
               <div class="flex-fill text-center">
@@ -126,6 +129,7 @@
 <script>
 import { CandidateStatusMixin } from "../mixins";
 import EventCandidateInfo from "./EventCandidateInfo";
+
 export default {
   mixins: [CandidateStatusMixin],
   components: {
@@ -148,7 +152,8 @@ export default {
       candidateInfo: "",
       selectedStatusCandidate: null,
       paginate: null,
-      currentPage: 1
+      currentPage: 1,
+      checkAll: false
     };
   },
   props: ["courseCode", "eventId", "actualNumberOfTrainees"],
@@ -188,6 +193,15 @@ export default {
       handler() {
         this.getCandidates();
       }
+    },
+    checkAll: {
+      handler() {
+        //alert("sdasd");
+        this.candidates.forEach(candidate => {
+          candidate.isChosen = this.checkAll;
+          //console.log(candidate);
+        });
+      }
     }
   },
   methods: {
@@ -195,7 +209,7 @@ export default {
      *
      */
     numberOfPages() {
-      let result = 0;
+      let result = 1;
       let numberCandidates = this.actualNumberOfTrainees;
       result = Math.floor(numberCandidates / 10);
       if (numberCandidates % 10 !== 0) {

@@ -9,8 +9,8 @@
     <b-col cols="12">
       <b-card
         no-body
-        v-for="event in events"
-        :key="event.eventId"
+        v-for="(event, index) in events"
+        :key="index"
         :id="event.eventId"
         class="border-0 mb-3"
       >
@@ -88,6 +88,7 @@
                     <b-button
                       v-b-tooltip.hover
                       title="Edit event's info"
+                      :disabled="event.eventStatus === 'Cancel'"
                       @click="editEvent(event)"
                       variant="light"
                       block
@@ -113,7 +114,12 @@
         </div>
       </b-card>
     </b-col>
-    <EditEvent id="modalEditEvent" ref="popupEditEvent" :event="currentEvent" />
+    <EditEvent
+      id="modalEditEvent"
+      ref="popupEditEvent"
+      v-on:makeNewEvent="makeNewEvent"
+      :event="currentEvent"
+    />
     <ViewEvent
       id="modalViewEvent"
       ref="popupViewEvent"
@@ -201,6 +207,11 @@ export default {
       this.candidateList.courseCode = event.courseCode;
       //
       this.$bvModal.show("candidateList");
+    },
+    makeNewEvent(event) {
+      //this.$router.go();
+      const page = this.$route.params.page;
+      this.$store.dispatch("event/getEvent", page);
     }
   }
 };

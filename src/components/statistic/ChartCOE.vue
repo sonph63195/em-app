@@ -2,13 +2,13 @@
   <b-card no-body>
     <b-card-header class="bg-white font-weight-bold" header-text-variant="info">Candidate Of Event</b-card-header>
     <b-tabs>
-      <b-tab :title="titleDoughnut" active>
+      <b-tab active>
         <template slot="title">
           <font-awesome-icon icon="chart-pie" class="mr-3" />
         </template>
         <Doughnut id="eventDoughnut" :data="dataEvent"></Doughnut>
       </b-tab>
-      <b-tab :title="titleBar">
+      <b-tab>
         <template slot="title">
           <font-awesome-icon icon="chart-bar" class="mr-3" />
         </template>

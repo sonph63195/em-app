@@ -47,12 +47,12 @@
         </li>
         <li class="nav-item w-100 mb-3">
           <div class="d-flex justify-content-between">
-            <span class="text-info ml-4 font-weight-bold">Grade:</span>
-            <span class="flex-fill text-right text-muted" v-if="info">{{candidateInfo.grade}}</span>
+            <span class="text-info ml-4 font-weight-bold">Final Grade:</span>
+            <span class="flex-fill text-right text-muted" v-if="info">{{candidateInfo.finalGrade}}</span>
             <b-input
               class="text-muted"
               v-if="edited"
-              v-bind:value="candidateInfo.grade"
+              v-bind:value="candidateInfo.finalGrade"
               type="text"
             />
           </div>
@@ -78,11 +78,11 @@
             <span
               class="flex-fill text-right text-muted"
               v-if="info"
-            >{{candidateInfo.certificatedId}}</span>
+            >{{candidateInfo.certificateId}}</span>
             <b-input
               class="text-muted"
               v-if="edited"
-              v-bind:value="candidateInfo.certificatedId"
+              v-bind:value="candidateInfo.certificateId"
               type="text"
             />
           </div>
@@ -118,15 +118,18 @@
         >Edit</b-button>
         <b-button
           v-show="showSaveButton"
-          @click="edited = false, info=true,showEditButton=true, showSaveButton=false"
+          @click="updateSectionInfo"
           variant="success"
           class="shadow ml-3"
         >Save</b-button>
+        <b-spinner v-show="updateSection.state.loading === true" label="Loading"></b-spinner>
       </div>
     </template>
   </b-modal>
 </template>
 <script>
+import { ToastMixin } from "../mixins";
+
 export default {
   data() {
     return {
@@ -137,6 +140,32 @@ export default {
       show: false
     };
   },
-  props: ["candidateInfo"]
+  props: ["candidateInfo"],
+  mixins: [ToastMixin],
+  methods: {
+    updateSectionInfo() {
+      this.edited = false;
+      this.info = true;
+      this.showEditButton = true;
+      this.showSaveButton = false;
+      this.$store.dispatch("section/updateSection", this.candidateInfo);
+    }
+  },
+  watch: {
+    updateSection: {
+      handler() {
+        if (this.updateSection.state.success === true) {
+          this.showToast("Update successfull", "Success", "success");
+        } else if (this.updateSection.state.success === false) {
+          this.showToast("Update faild", "Error", "danger");
+        }
+      }
+    }
+  },
+  computed: {
+    updateSection() {
+      return this.$store.state.section.updateSection;
+    }
+  }
 };
 </script>

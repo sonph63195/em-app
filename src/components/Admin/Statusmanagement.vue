@@ -5,17 +5,25 @@
       <b-container fluid>
         <b-table
           thead-class="header_table"
-          :items="statusItems"
-          :fields="statusFields"
+          :items="accounts.accounts"
+          :fields="tableStatus.fields"
           striped
           bordered
           hover
         >
+          <template slot="#" slot-scope="data">{{ data.index + 1 }}</template>
+          <template slot="username" slot-scope="data">{{ data.item.username }}</template>
+          <template slot="first_name" slot-scope="data">{{ data.item.firstName }}</template>
+          <template slot="last_name" slot-scope="data">{{ data.item.lastName }}</template>
+          <template
+            slot="status"
+            slot-scope="data"
+          >{{ data.item.enabled == true? 'Enabled':'Disabled' }}</template>
           <template slot="handle" slot-scope="row">
             <!-- edit profile button -->
             <b-button
               size="sm"
-              @click="info(row.item, row.index, $event.target)"
+              @click="info(row.item, $event.target)"
               class="mr-1"
               variant="info"
             >Edit profile</b-button>
@@ -27,18 +35,6 @@
             >{{row.item.status =="Enabled"? "Disabled":"Enabled"}}</b-button>
           </template>
         </b-table>
-
-        <!-- pagination of status management table -->
-        <!-- <b-row class="float-right">
-          <b-col md="6" class="my-1">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalRows"
-              :per-page="perPage"
-              class="my-0"
-            ></b-pagination>
-          </b-col>
-        </b-row>-->
 
         <!-- Edit info modal -->
 
@@ -84,7 +80,7 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group
+            <!-- <b-form-group
               label="Password :"
               label-for="password"
               :state="passwordState"
@@ -112,7 +108,7 @@
                 v-model="confirmPassword"
                 :state="conFirmpasswordState"
               ></b-form-input>
-            </b-form-group>
+            </b-form-group>-->
           </b-form>
 
           <!-- footer of modal -->
@@ -132,77 +128,28 @@ export default {
     return {
       fisrtNameState: null,
       lastNameState: null,
-      passwordState: null,
-      conFirmpasswordState: null,
-      password: "",
-      confirmPassword: "",
+      // passwordState: null,
+      // conFirmpasswordState: null,
+      // password: "",
+      // confirmPassword: "",
       infoModal: {
         id: "info-modal",
         username: "",
         first_name: "",
-        last_name: "",
-        password: "",
-        confirm_password: ""
+        last_name: ""
+        // password: "",
+        // confirm_password: ""
       },
-      statusFields: [
-        "#",
-        "username",
-        "first_name",
-        "last_name",
-        "status",
-        "handle"
-      ],
-      statusItems: [
-        {
-          "#": 1,
-          username: "Trinnguyen@gmail.com",
-          first_name: "Trin",
-          last_name: "Nguyen",
-          status: "Disabled"
-        },
-        {
-          "#": 2,
-          username: "Quockhanh@gmail.com",
-          first_name: "Khanh",
-          last_name: "Bui",
-          status: "Enabled"
-        },
-        {
-          "#": 3,
-          username: "Hoangloi@gmail.com",
-          first_name: "Loi",
-          last_name: "Nguyen",
-          status: "Enabled"
-        },
-        {
-          "#": 4,
-          username: "Hoanviet@gmail.com",
-          first_name: "Viet",
-          last_name: "Phan",
-          status: "Enabled"
-        },
-        {
-          "#": 5,
-          username: "Hoangson@gmail.com",
-          first_name: "Son",
-          last_name: "Pham",
-          status: "Enabled"
-        },
-        {
-          "#": 6,
-          username: "Trinnguyen@gmail.com",
-          first_name: "Trin",
-          last_name: "Nguyen",
-          status: "Enabled"
-        },
-        {
-          "#": 7,
-          username: "Trinnguyen@gmail.com",
-          first_name: "Trin",
-          last_name: "Nguyen",
-          status: "Enabled"
-        }
-      ],
+      tableStatus: {
+        fields: [
+          "#",
+          { key: "username", sortable: true },
+          { key: "first_name", sortable: true },
+          { key: "last_name", sortable: false },
+          { key: "status", sortable: false },
+          { key: "handle", sortable: false }
+        ]
+      },
       rolesFields: [
         "#",
         "username",
@@ -265,12 +212,19 @@ export default {
       ]
     };
   },
+  mounted() {
+    this.getAllAccount();
+  },
   methods: {
+    //Load account
+    getAllAccount() {
+      this.$store.dispatch("account/getAllAccount");
+    },
     // Show edit profile modal
-    info(item, index, button) {
+    info(item, button) {
       this.infoModal.username = item.username;
-      this.infoModal.first_name = item.first_name;
-      this.infoModal.last_name = item.last_name;
+      this.infoModal.first_name = item.firstName;
+      this.infoModal.last_name = item.lastName;
       this.$root.$emit("bv::show::modal", this.infoModal.id, button);
     },
     // Reset edit profile modal
@@ -278,10 +232,10 @@ export default {
       this.infoModal.title = "";
       this.fisrtNameState = null;
       this.lastNameState = null;
-      this.passwordState = null;
-      this.conFirmpasswordState = null;
-      this.password = "";
-      this.confirmPassword = "";
+      // this.passwordState = null;
+      // this.conFirmpasswordState = null;
+      // this.password = "";
+      // this.confirmPassword = "";
     },
     // check edit profile form
     checkFormValidity() {
@@ -295,17 +249,18 @@ export default {
         this.infoModal.last_name.length < 15
           ? "valid"
           : "invalid";
-      this.passwordState = this.password.length > 0 ? "valid" : "invalid";
-      if (this.passwordState == "valid") {
-        this.conFirmpasswordState =
-          this.password == this.confirmPassword ? "valid" : "invalid";
-      }
+      // this.passwordState = this.password.length > 0 ? "valid" : "invalid";
+      // if (this.passwordState == "valid") {
+      //   this.conFirmpasswordState =
+      //     this.password == this.confirmPassword ? "valid" : "invalid";
+      // }
       const valid =
         this.fisrtNameState == this.lastNameState &&
-        this.lastNameState == "valid" &&
-        this.passwordState == "valid" &&
-        this.conFirmpasswordState == "valid"
-          ? true
+        this.lastNameState == "valid"
+          ? // &&
+            // this.passwordState == "valid" &&
+            // this.conFirmpasswordState == "valid"
+            true
           : false;
       return valid;
     },
@@ -328,6 +283,12 @@ export default {
     // change status of table status management
     changeStatus(item) {
       item.status = item.status === "Enabled" ? "Disabled" : "Enabled";
+    }
+  },
+
+  computed: {
+    accounts() {
+      return this.$store.state.account.getAllAccount;
     }
   }
 };

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 Vue.use(Vuex);
 
+import { account } from './account.module';
 import { authenticate } from './authenticate.module';
 import { campuslink } from "./campuslink.module";
 import { candidate } from "./candidate.module";
@@ -15,6 +16,7 @@ import { supplier } from "./supplier.module";
 
 export const store = new Vuex.Store({
     modules: {
+        account,
         authenticate,
         campuslink,
         candidate,

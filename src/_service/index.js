@@ -1,3 +1,4 @@
+export * from "./account-service";
 export * from "./authenticate-service";
 export * from "./campuslinkprogram-service";
 export * from "./candidate-service";

@@ -157,7 +157,8 @@ export default {
       ],
       suppliers: [],
       subSubjects: [],
-      courses: []
+      courses: [],
+      changeYear: false
     };
   },
   methods: {
@@ -166,10 +167,8 @@ export default {
      */
     updateEvent(event) {
       this.formatDay("D-MMM-YYYY", event);
-      console.log(
-        (event.changeYear = this.checkChangeYear(event.plannedStartDate))
-      );
-
+      this.changeYear = this.checkChangeYear(event.plannedStartDate);
+      event.changeYear = this.changeYear;
       this.$store.dispatch("event/updateEvent", event);
     },
 
@@ -187,7 +186,7 @@ export default {
     checkChangeYear(planDate) {
       const planYear = this.formatDate(planDate, "YYYY");
       const currentYear = this.formatDate(this.plan.start, "YYYY");
-      return currentYear < planYear;
+      return currentYear != planYear;
     }
   },
   computed: {
@@ -230,13 +229,17 @@ export default {
       handler() {
         this.formatDay("YYYY-MM-DD", this.event);
         if (this.updateEventState.updated === false) {
-          this.showToast("Event cannot update", "Error", "danger");
+          let errMsg = this.updateEventState.data.errors[0];
+          this.showToast(errMsg, "Error", "danger");
         } else if (this.updateEventState.updated === true) {
           this.showToast("Event was updated", "Success", "success");
           // close modal
           this.$bvModal.hide("modalEditEvent");
-          //send data to list
-          this.$emit("updateEvent", this.eventUpdate);
+          //send data to list if change year
+          this.$emit(
+            "makeNewEvent",
+            this.updateEventState.data.identifiedObject
+          );
         }
       }
     },

@@ -75,7 +75,7 @@
                   </b-button>
                 </div>
                 <div class="mt-3 mt-md-0 align-self-center">
-                  <b-pagination-nav :link-gen="linkGen" :number-of-pages="3" use-router></b-pagination-nav>
+                  <b-pagination-nav :link-gen="linkGen" :number-of-pages="pageNumber" use-router></b-pagination-nav>
                 </div>
               </div>
             </b-col>
@@ -193,7 +193,8 @@ export default {
       ],
       course: [],
       subSubject: [],
-      eventsRemove: null
+      eventsRemove: null,
+      pageNumber: 1
     };
   },
   created() {
@@ -205,6 +206,7 @@ export default {
     this.getSupplier();
     this.getSubSubjectType();
     this.getCampuslink();
+    this.getEventStatus();
   },
   watch: {
     cancelEventState: {
@@ -240,6 +242,16 @@ export default {
               text: subSubject.subSubjectTypeName
             };
           });
+        }
+      }
+    },
+    eventStatus: {
+      handler() {
+        let num = 1;
+        if (this.eventStatus) {
+          Object.values(this.eventStatus).forEach(el => (num += el));
+          this.pageNumber = Math.floor(num / 10);
+          if (num % 10 !== 0) this.pageNumber += 1;
         }
       }
     }
@@ -278,6 +290,9 @@ export default {
      */
     subSubjects() {
       return this.$store.state.subject.getSubSubject;
+    },
+    eventStatus() {
+      return this.$store.state.home.eventStatus.data;
     }
   },
   methods: {
@@ -289,6 +304,12 @@ export default {
     },
     getCampuslink() {
       this.$store.dispatch("campuslink/getCampuslink");
+    },
+    /**
+     * Get All number of event
+     */
+    getEventStatus() {
+      this.$store.dispatch("home/getEventStatus");
     },
     /**
      * File added Event when user drag or choose a file

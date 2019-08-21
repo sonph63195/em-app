@@ -83,11 +83,10 @@ export const event = {
             state.updateEvent = { updating: true }
         },
         updateEventSuccess(state, event) {
-            state.updateEvent = { updated: true }
-            state.event = event;
+            state.updateEvent = { updated: true, data: event }
         },
-        updateEventFailure(state) {
-            state.updateEvent = { updated: false }
+        updateEventFailure(state, error) {
+            state.updateEvent = { updated: false, data: error }
         },
 
         /**
@@ -235,11 +234,15 @@ export const event = {
         updateEvent({ commit }, event) {
             commit("updateEventRequest");
             eventService.updateEvent(event).then(success => {
-                commit("updateEventSuccess", success.body);
+
+                if (success.body.status === "200") {
+                    commit("updateEventSuccess", success.body);
+                } else {
+                    commit("updateEventFailure", success.body);
+                }
             }, error => {
-                commit("updateEventFailure", error.status);
-                // eslint-disable-next-line no-console
-                console.error(error);
+                commit("updateEventFailure", error.body);
+
             })
         },
 
@@ -275,7 +278,7 @@ export const event = {
         createEventFromManual({ commit }, { event }) {
             commit("createEventFromManualRequest");
             eventService.createEventFromManual(event).then(success => {
-                if (success.body.status === 200) {
+                if (success.body.status === "200") {
                     commit("createEventFromManualSuccess", success.body);
                 } else {
                     commit("createEventFromManualFailure", success.body);
@@ -294,6 +297,6 @@ export const event = {
             }, error => {
                 commit("loadAllCourseCodeFailure", error.body)
             })
-        }
+        },
     }
 }

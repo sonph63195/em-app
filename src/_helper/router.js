@@ -35,7 +35,8 @@ export const router = new Router({
         { path: '/event-info', redirect: "/event/page=1" },
         { path: '/event-info/eventId=:eventId', redirect: "/event-info/eventId=:eventId/page=1" },
         { path: '/event/page=:page', name: 'eventPage', component: Event },
-        { path: '/event-info/eventId=:eventId/page=:page', name: 'eventInfoPage', component: EventInfo },
+        //{ path: '/event-info/eventId=:eventId/page=:page', name: 'eventInfoPage', component: EventInfo },
+        { path: '/event-info/eventId=:eventId/page=:page', redirect: "/event/page=1" },
 
         /**
          * Statistic

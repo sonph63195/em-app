@@ -123,14 +123,16 @@
           </div>
         </div>
       </div>
-      <div class="text-right">
-        <b-button variant="outline-primary" :to="`/event-info/eventId=${event.eventId}`">See more</b-button>
-      </div>
     </div>
     <template slot="modal-footer" slot-scope="{ cancel }">
       <div class="d-flex justify-content-center w-100">
         <b-button @click="cancel()" variant="light">Close</b-button>
-        <b-button @click="showEditFromView" variant="success" class="shadow ml-3">Edit event</b-button>
+        <b-button
+          @click="showEditFromView"
+          :disabled="event.eventStatus === 'Cancel'"
+          variant="success"
+          class="shadow ml-3"
+        >Edit event</b-button>
       </div>
     </template>
   </b-modal>
