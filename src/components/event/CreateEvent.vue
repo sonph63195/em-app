@@ -146,9 +146,12 @@ export default {
         supplier: "ĐH FPT",
         plannedStartDate: this.formatDate(new Date(), "YYYY-MM-DD"),
         plannedEndDate: this.formatDate(new Date(), "YYYY-MM-DD"),
-        note: null,
+        plannedLearningTime: 320,
+        actualLearningTime: 320,
+        eventStatus: "Planning",
+        note: "",
         budgetCode: 0,
-        planExpense: null
+        planExpense: 0
       },
       course: [],
       supplier: [],
@@ -236,8 +239,13 @@ export default {
       handler() {
         if (this.createEventFromManual.state.success === true) {
           this.showToast("Successful", "Succes", "success");
+          this.$emit(
+            "addNewSuccess",
+            this.createEventFromManual.data.identifiedObject
+          );
         } else if (this.createEventFromManual.state.success === false) {
-          this.showToast("Somthing wrong", "Error", "danger");
+          let msg = this.createEventFromManual.data.errors[0];
+          this.showToast(msg, "Error", "danger");
         }
         this.convertDate("YYYY-MM-DD");
       }

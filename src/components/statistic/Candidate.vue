@@ -5,7 +5,8 @@
         <ul class="nav">
           <li class="nav-item my-1 w-100">
             <b-form-group label="Event" label-for="input-statust_1">
-              <b-form-input id="input-statust_1" v-model="candidate.statust_1" class="w-100"></b-form-input>
+              <b-form-select id="input-statust_1"  :options="contracts" v-model="candidate.statust_1" class="w-100"></b-form-select>
+              <!-- <div class="mt-3">Selected: <strong>{{ candidate.statust_1 }}</strong></div> -->
             </b-form-group>
             <div class="text-center">
               <font-awesome-icon icon="arrow-down" class="display-3" />
@@ -13,12 +14,12 @@
           </li>
           <li class="nav-item my-1 w-100">
             <b-form-group label="Event" label-for="input-statust_2">
-              <b-form-input id="input-statust_2" v-model="candidate.statust_2" class="w-100"></b-form-input>
+              <b-form-select id="input-statust_2" :options="contracts" v-model="candidate.statust_2" class="w-100"></b-form-select>
             </b-form-group>
           </li>
         </ul>
         <div class="text-center mb-5">
-          <b-button type="submit">Proccess</b-button>
+          <b-button @click="reportSection()">Proccess</b-button>
           <div>
             <span>Result:&nbsp;</span>
             <span>{{ candidate.number }}</span>
@@ -47,10 +48,16 @@ export default {
         { value: null, text: "Please select university" },
         { value: "FU", text: "FPT University" }
       ],
+      contracts: [
+        { value: "On_job_training_Contract", text: "On Job Training Contract" },
+        { value: "Define-term Labor-Contract", text: "Define term Labor Contract" },
+        { value: "Fresher-Training-Contract", text: "Fresher Training Contract" },
+        { value: "No_contract", text: "No Contract" }
+      ],
       candidate: {
-        statust_1: "Internship",
-        statust_2: "Fresher",
-        number: 80
+        statust_1: "",
+        statust_2: "",
+        number: ""
       },
       fields: ["No", "Student_Name","Account", "University", "Gender"],
       items: [
@@ -61,6 +68,34 @@ export default {
         { No:"5", Student_Name: "Nguyen Thi Hong Nhung",Account:"nhunnhun.abc@gmail.com",University:"FU" ,Gender:"Female"},
       ]
     };
+  },
+  methods: {
+    /**
+     *
+     */
+    reportSection() {
+      this.$store.dispatch("statistic/reportSection",this.candidate.statust_1,this.candidate.statust_2);
+    },
+  },
+  watch:{
+    handler(){
+     this.reportSection();
+    }
+  },
+  mounted(){
+    this.reportSection();
+  },
+  computed: {
+    /**
+     *
+     */
+    // reportSectiontState() {
+    //   return this.$store.state.statistic.reportSection;
+    // },
+
+    reportSectionUpdate() {
+      return this.$store.state.statistic.reportSection  ;
+    },
   }
 };
 </script>

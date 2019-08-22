@@ -9,7 +9,7 @@ export const CandidateStatusMixin = {
         case "Cancel":
           result += "warning";
           break;
-        case "Drop-Out":
+        case "Drop-out":
           result += "danger";
           break;
         case "Passed":

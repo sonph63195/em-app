@@ -38,8 +38,8 @@
                   </span>
                 </div>
               </template>
-              <b-dropdown-item to="/setting-university">School code</b-dropdown-item>
               <b-dropdown-item to="/setting-param">Param</b-dropdown-item>
+              <b-dropdown-item to="/admin">Admin</b-dropdown-item>
               <b-dropdown-item @click="logout">
                 <span class="text-danger">
                   <font-awesome-icon icon="sign-out-alt" class="mr-3" />Sign Out

@@ -166,6 +166,7 @@ export const event = {
                 state: { success: true },
                 data: data
             }
+            state.events.unshift(data.identifiedObject);
         },
         createEventFromManualFailure(state, error) {
             state.createEventFromManual = {

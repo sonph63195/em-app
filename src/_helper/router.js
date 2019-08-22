@@ -62,16 +62,16 @@ export const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    // redirect to login page if not loged in
-    // const pulicPages = ['/login']; // the list of public pages
-    // const authRequired = !pulicPages.includes(to.path); // find path not public pages
-    // const loggedIn = cookies.isKey("token");// will get user in cookies
+    //redirect to login page if not loged in
+    const pulicPages = ['/login']; // the list of public pages
+    const authRequired = !pulicPages.includes(to.path); // find path not public pages
+    const loggedIn = cookies.isKey("token");// will get user in cookies
 
-    // if (authRequired && !loggedIn) {
-    //     return next('/login');
-    // } else if (!authRequired && loggedIn) {
-    //     return next("/");
-    // }
+    if (authRequired && !loggedIn) {
+        return next('/login');
+    } else if (!authRequired && loggedIn) {
+        return next("/");
+    }
 
     next();
 });

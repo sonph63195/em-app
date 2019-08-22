@@ -37,7 +37,7 @@ function cancelEvent(eventIds) {
     eventIds.forEach(id => {
         url += `eventId=${id}&`
     });
-    return request.patch(`event?${url}`, null, authHeader.get());
+    return request.patch(`events?${url}`, null, authHeader.get());
 }
 
 /**

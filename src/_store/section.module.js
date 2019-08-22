@@ -8,6 +8,13 @@ export const section = {
     updateSection: {
       state: { loading: false },
       data: []
+    },
+    saveCandidateOfEventFromManual: {
+      state: { loading: false },
+      data: []
+    },
+    cancelSections: {
+      state: { loading: true },
     }
   },
   mutations: {
@@ -54,6 +61,40 @@ export const section = {
         state: { success: false },
         data: error
       }
+    },
+    saveCandidateOfEventFromManualRequest(state) {
+      state.saveCandidateOfEventFromManual = {
+        state: { loading: true }
+      }
+    },
+    saveCandidateOfEventFromManualSuccess(state, data) {
+      state.saveCandidateOfEventFromManual = {
+        state: { success: true },
+        data: data
+      }
+    },
+    saveCandidateOfEventFromManualFailure(state, error) {
+      state.saveCandidateOfEventFromManual = {
+        state: { success: false },
+        data: error
+      }
+    },
+    cancelSectionsRequest(state) {
+      state.cancelSections = {
+        state: { loading: true }
+      }
+    },
+    cancelSectionsSuccess(state, data) {
+      state.cancelSections = {
+        state: { success: true },
+        data: data
+      }
+    },
+    cancelSectionsFailure(state, error) {
+      state.cancelSections = {
+        state: { success: false },
+        data: error
+      }
     }
   },
   actions: {
@@ -77,6 +118,26 @@ export const section = {
         commit("updateSectionSuccess", success.body);
       }, error => {
         commit("updateSectionFailure", error.body);
+      })
+    },
+    saveCandidateOfEventFrom({ commit }, candidate) {
+      commit("saveCandidateOfEventFromManualRequest");
+      sectionService.saveCandidateOfEventFromManual(candidate).then(success => {
+        if (success.body.status === "200") {
+          commit("saveCandidateOfEventFromManualSuccess", success.body);
+        } else {
+          commit("saveCandidateOfEventFromManualFailure", success.body);
+        }
+      }, error => {
+        commit("saveCandidateOfEventFromManualFailure", error.body);
+      })
+    },
+    cancelSections({ commit }, sections) {
+      commit("cancelSectionsRequest");
+      sectionService.cancelSections(sections).then(success => {
+        commit("cancelSectionsSuccess", success.body);
+      }, error => {
+        commit("cancelSectionsFailure", error.body);
       })
     }
   }

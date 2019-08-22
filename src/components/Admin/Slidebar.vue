@@ -1,7 +1,6 @@
 <template>
   <!--Slide bar-->
   <b-collapse
-    v-b-scrollspy:nav-scroller
     id="sidebar"
     style="width: 320px; height=100vh; margin-right: 2rem; background: #6699FF;"
     visible
@@ -54,7 +53,6 @@
                             color:#fff;
                             display: block;text-decoration:none;"
                           href="/admin/#Status"
-                          @click="scrollIntoView"
                         >&nbsp;&nbsp;&nbsp;&nbsp;Status management</a>
                       </li>
                       <li>
@@ -64,7 +62,6 @@
                             color:#fff;
                             display: block;text-decoration:none;"
                           href="/admin/#CreateAccount"
-                          @click="scrollIntoView"
                         >&nbsp;&nbsp;&nbsp;&nbsp;Create account</a>
                       </li>
                     </ul>
@@ -74,7 +71,6 @@
                   <a
                     style="padding: 10px; font-size: 1.1em; display: block;color:#fff;text-decoration:none"
                     href="/admin/#RolesManagement"
-                    @click="scrollIntoView"
                   >Roles management</a>
                 </li>
               </ul>

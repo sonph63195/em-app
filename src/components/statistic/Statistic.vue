@@ -1,28 +1,28 @@
 <template>
   <div>
     <Header />
-    <main>
-      <b-container class="mt-3">
+    <main class="mt-3">
+      <b-container>
         <b-card no-body>
           <b-tabs pills card align="center">
-            <b-tab title="Event" active>
+            <!-- <b-tab title="Event" active>
               <Event></Event>
-            </b-tab>
+            </b-tab>-->
             <b-tab title="Sub-Subject Type">
-              <ChartSubSubject/>
+              <ChartSubSubject />
             </b-tab>
             <b-tab title="Event Status">
-              <ChartEventStatus/>
+              <ChartEventStatus />
             </b-tab>
             <b-tab title="CampusLink program">
-              <ChartCampusLinkprogram/>
+              <ChartCampusLinkprogram />
             </b-tab>
             <b-tab title="Section status">
-              <ChartSectionstatus/>
+              <ChartSectionstatus />
             </b-tab>
-            <b-tab title="Candidate">
+            <!-- <b-tab title="Candidate">
               <Candidate/>
-            </b-tab>
+            </b-tab>-->
           </b-tabs>
         </b-card>
       </b-container>
@@ -34,10 +34,10 @@
 import Header from "../header/Header";
 import Event from "./Event";
 import Candidate from "./Candidate";
-import ChartSubSubject from "./ChartSubSubject"
-import ChartEventStatus from "./ChartEventStatus"
-import ChartSectionstatus from "./ChartSectionstatus"
-import ChartCampusLinkprogram from "./ChartCampusLinkprogram"
+import ChartSubSubject from "./ChartSubSubject";
+import ChartEventStatus from "./ChartEventStatus";
+import ChartSectionstatus from "./ChartSectionstatus";
+import ChartCampusLinkprogram from "./ChartCampusLinkprogram";
 
 export default {
   components: {
@@ -47,7 +47,7 @@ export default {
     ChartSubSubject,
     ChartEventStatus,
     ChartSectionstatus,
-    ChartCampusLinkprogram,
+    ChartCampusLinkprogram
   }
 };
 </script>

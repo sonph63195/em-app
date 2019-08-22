@@ -48,11 +48,12 @@
       <ChartCOE />
       <!-- <EventChart/> -->
     </b-col>
-    <div class="d-flex justify-content-end">
-      <b-col cols="8" class="mt-2 ml-5" md="4">
+      <b-col cols="12" class="mt-2" md="2">
+        <div class="bg-white"></div>
+      </b-col>
+      <b-col cols="12" class="mt-2 " md="10">
         <b-table class="border 1" striped hover :items="items" :fields="fields"></b-table>
       </b-col>
-    </div>
   </b-row>
 </template>
 

@@ -11,7 +11,15 @@ export const candidate = {
       data: []
     }
   },
+  getters: {
+    candidates(state) {
+      return state.candidates;
+    }
+  },
   mutations: {
+    setCandidates(state, candidates) {
+      state.candidates = candidates;
+    },
     getCandidateRequest(state) {
       state.getCandidate = { loading: true };
       state.candidates = [];

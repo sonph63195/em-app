@@ -1,12 +1,12 @@
 <template>
   <b-modal :id="id" :ref="id" title="Create Candidate" size="custome">
     <b-card no-body>
-      <b-tabs v-model="tabIndex" card>
+      <b-tabs v-if="saveCandidate.state.loading !== true" v-model="tabIndex" card>
         <b-tab title="Candidate Info" active>
           <b-container fluid>
             <b-form>
               <b-row>
-                <b-col cols="12" v-if="courseCode === null">
+                <b-col cols="12">
                   <b-form-group
                     id="input-group-courseCode"
                     label="Course code"
@@ -16,6 +16,7 @@
                       id="input-courseCode"
                       v-model="candidate.courseCode"
                       :options="courseCodes"
+                      :disabled="courseCode !== null"
                       required
                     ></b-form-select>
                   </b-form-group>
@@ -199,15 +200,9 @@
                 </b-col>
               </b-row>
             </b-form>
-          </b-container>
-          <b-container fluid>
-            <b-row>
-              <b-col cols="12">
-                <div class="bg-white rounded-5 p-3 text-center">
-                  <b-spinner style="width: 3rem; height: 3rem;" label="Loading"></b-spinner>
-                </div>
-              </b-col>
-            </b-row>
+            <div class="text-right">
+              <b-button @click="tabIndex++" variant="outline-primary">Next</b-button>
+            </div>
           </b-container>
         </b-tab>
         <b-tab title="Training Info">
@@ -296,24 +291,26 @@
                 </b-col>
               </b-row>
             </b-form>
-          </b-container>
-          <b-container fluid>
-            <b-row>
-              <b-col cols="12">
-                <div class="bg-white rounded-5 p-3 text-center">
-                  <b-spinner style="width: 3rem; height: 3rem;" label="Loading"></b-spinner>
-                </div>
-              </b-col>
-            </b-row>
+            <div class="text-left">
+              <b-button @click="tabIndex--" variant="outline-primary">Previous</b-button>
+            </div>
           </b-container>
         </b-tab>
       </b-tabs>
+      <b-container v-if="saveCandidate.state.loading === true" fluid>
+        <b-row>
+          <b-col cols="12">
+            <div class="bg-white rounded-5 p-3 text-center">
+              <b-spinner style="width: 3rem; height: 3rem;" label="Loading"></b-spinner>
+            </div>
+          </b-col>
+        </b-row>
+      </b-container>
     </b-card>
     <template slot="modal-footer" slot-scope="{ cancel }">
       <div class="d-flex justify-content-center w-200 fixed-bottom sticky-top">
         <b-button @click="cancel()" variant="light">Cancel</b-button>
-        <b-button variant="success" v-if="tabIndex == 0" class="ml-3">Save Info</b-button>
-        <b-button v-if="tabIndex == 1" variant="success" class="shadow ml-3">Save section</b-button>
+        <b-button @click="saveCandidateAction" variant="success" class="ml-3">Create new</b-button>
       </div>
     </template>
   </b-modal>
@@ -321,6 +318,8 @@
 
 
 <script>
+import { ToastMixin } from "../mixins";
+
 export default {
   props: {
     id: String,
@@ -329,8 +328,14 @@ export default {
       default: null
     }
   },
+  mixins: [ToastMixin],
   mounted() {
     this.loadAllCourseCode();
+    //add course code
+    this.candidate.courseCode = this.courseCode;
+    this.getFaculty();
+    this.getSupplier();
+    this.getSubSubjectType();
   },
   data() {
     return {
@@ -406,6 +411,9 @@ export default {
     },
     facultiesList() {
       return this.$store.state.faculty.getFaculty;
+    },
+    saveCandidate() {
+      return this.$store.state.section.saveCandidateOfEventFromManual;
     }
   },
   methods: {
@@ -420,17 +428,28 @@ export default {
     },
     getFaculty() {
       this.$store.dispatch("faculty/getFaculty");
+    },
+    saveCandidateAction() {
+      this.$store.dispatch("section/saveCandidateOfEventFrom", this.candidate);
     }
   },
   watch: {
     courseCodesList: {
       handler() {
         if (this.courseCodesList.data) {
-          this.courseCodes = this.courseCodesList.data.flatMap(code => {
-            return {
-              value: code,
-              text: code
-            };
+          this.courseCodes = [];
+          const codes = this.courseCodesList.data;
+          const codesKeys = Object.keys(codes);
+          codesKeys.forEach(key => {
+            this.courseCodes.push({
+              value: codes[key],
+              text: codes[key],
+              eventId: key
+            });
+          });
+          this.courseCodes.unshift({
+            value: null,
+            text: "Select your course code"
           });
         }
       }
@@ -471,6 +490,20 @@ export default {
               value: faculty.name
             };
           });
+        }
+      }
+    },
+    saveCandidate: {
+      handler() {
+        if (this.saveCandidate.state.success === false) {
+          let msg = this.saveCandidate.data.errors[0];
+          this.showToast(msg, "Error", "danger");
+        } else if (this.saveCandidate.state.success === true) {
+          this.showToast("Create new success", "Success", "success");
+          this.$emit(
+            "addNewCandidateEventSuccess",
+            this.saveCandidate.data.identifiedObject
+          );
         }
       }
     }

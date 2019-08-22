@@ -372,7 +372,7 @@ export default {
   created() {
     this.getSupplier();
     this.getSubSubjectType();
-    this.getFaculty();
+    
   },
   computed: {
     universities() {

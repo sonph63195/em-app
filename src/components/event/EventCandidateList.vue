@@ -3,13 +3,13 @@
     <b-card no-body class="border-0">
       <div class="border-bottom p-2 d-flex">
         <div class="flex-fill">
-          <button class="btn btn-success">
+          <!-- <button class="btn btn-success">
             <font-awesome-icon icon="file-excel" class="mr-md-2" />
             <span class="d-none d-md-inline-block">Import Candidate</span>
-          </button>
+          </button>-->
         </div>
         <div class="ml-3 d-flex flex-0">
-          <button class="btn btn-primary">
+          <button @click="showCreateCandidate" class="btn btn-primary">
             <font-awesome-icon icon="plus-circle" class="mr-md-2" />
             <span class="d-none d-md-inline-block">Create Candidate</span>
           </button>
@@ -63,6 +63,12 @@
           </template>
         </b-table>
       </div>
+      <div
+        v-if="loadSectionState.loaded == false || candidates.length < 1"
+        class="alert alert-danger border-0"
+      >
+        <span>Empty!</span>
+      </div>
     </b-card>
 
     <!-- Footer modal -->
@@ -101,22 +107,9 @@
             </li>
           </ul>
         </div>
+
         <div>
-          <b-form inline>
-            <b-form-select v-model="selectedStatusCandidate">
-              <option value="null">Choose status candidates</option>
-              <option value="Active">Active</option>
-              <option value="Cancel">Cancel</option>
-              <option value="Done">Done</option>
-              <option value="Drop-Out">Drop-Out</option>
-              <option value="Failed">Failed</option>
-              <option value="Passed">Passed</option>
-            </b-form-select>
-            <button type="button" class="btn ml-2 mr-2 btn-outline-warning">Change status</button>
-          </b-form>
-        </div>
-        <div>
-          <button class="btn btn-light mr-3">
+          <button @click="cancelSection" class="btn btn-light mr-3">
             <font-awesome-icon icon="trash" class="mr-md-2" />
             <span class="d-none d-md-inline-block">Remove Select</span>
           </button>
@@ -124,16 +117,23 @@
       </div>
     </template>
     <EventCandidateInfo v-bind:candidateInfo="this.candidateInfo" />
+    <CreateCandidate
+      id="modalCreateCandidate"
+      :courseCode="courseCode"
+      v-on:addNewCandidateEventSuccess="addNewCandidateEventSuccess"
+    />
   </b-modal>
 </template>
 <script>
 import { CandidateStatusMixin } from "../mixins";
 import EventCandidateInfo from "./EventCandidateInfo";
+import CreateCandidate from "../candidate/CreateCandidate";
 
 export default {
   mixins: [CandidateStatusMixin],
   components: {
-    EventCandidateInfo
+    EventCandidateInfo,
+    CreateCandidate
   },
   data() {
     return {
@@ -235,6 +235,22 @@ export default {
       };
       const { dispatch } = this.$store;
       dispatch("section/loadSection", body);
+    },
+    showCreateCandidate() {
+      //
+      this.$bvModal.show("modalCreateCandidate");
+    },
+    addNewCandidateEventSuccess(candidate) {
+      this.candidates.unshift(candidate);
+    },
+    cancelSection() {
+      const sections = this.candidates.flatMap(candidate => {
+        if (candidate.isChosen === true) {
+          return candidate.sectionId;
+        }
+        return null;
+      });
+      this.$store.dispatch("section/cancelSections", sections);
     }
   }
 };
