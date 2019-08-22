@@ -14,7 +14,7 @@
                 >
                   <font-awesome-icon icon="calendar-alt" class="mr-3" />Import Candidate
                 </b-button>-->
-                <b-button v-b-modal.modalCreateCandidate variant="primary" class="mb-3">
+                <b-button v-b-modal.modalCreateNewCandidate variant="primary" class="mb-3">
                   <font-awesome-icon icon="plus-circle" class="mr-3" />Create Candidate
                 </b-button>
               </div>

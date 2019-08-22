@@ -127,9 +127,9 @@
       :event="currentEvent"
     />
     <EventCandidateList
-      v-bind:eventId="candidateList.eventId"
-      v-bind:courseCode="candidateList.courseCode"
-      v-bind:actualNumberOfTrainees="candidateList.actualNumberOfTrainees"
+      :eventId="candidateList.eventId"
+      :courseCode="candidateList.courseCode"
+      :actualNumberOfTrainees="candidateList.actualNumberOfTrainees"
     />
   </b-row>
 </template>

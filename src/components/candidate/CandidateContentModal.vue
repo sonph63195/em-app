@@ -1,19 +1,29 @@
 <template>
-  <div class="bg-white table-responsive-lg">
-    <div>
-      <!-- <b-form class="d-flex" @submit.prevent="showByEvent">
+  <div class="bg-white">
+    <div v-if="eventById.loading">
+      <div
+        class="back-drop fixed-top fixed-bottom d-flex justify-content-center align-items-center"
+      >
+        <b-spinner variant="light" style="width: 3rem; height: 3rem;" label="Loading..."></b-spinner>
+      </div>
+    </div>
+    <div class="d-flex m-2">
+      <div class="flex-fill"></div>
+      <b-form class="d-flex mx-2" @submit.prevent="showByEvent">
         <b-form-select size="sm" v-model="courseCode" :options="courseCodes"></b-form-select>
-        <b-button size="sm" type="submit" variant="outline-dark">Show</b-button>
-      </b-form>-->
+        <b-button
+          v-b-tooltip.hover
+          title="Show candidates list of event"
+          size="sm"
+          type="submit"
+          variant="outline-dark"
+          class="ml-2"
+        >Show</b-button>
+      </b-form>
     </div>
     <div>
-      <div v-if="getCandidatesState.loaded === true">
-        <b-table
-          ref="selectableTable"
-          :items="candidates"
-          :fields="fields"
-          :sort-desc.sync="sortDesc"
-        >
+      <div v-if="getCandidatesState.loaded === true" class="table-responsive-lg">
+        <b-table ref="selectableTable" :items="candidates" :fields="fields">
           <!-- Create checkbox all -->
           <template slot="HEAD_all" slot-scope="data">
             <div class="d-flex">
@@ -96,7 +106,7 @@
               </b-button>
             </div>
             <div class="mt-3">
-              <b-pagination-nav :link-gen="linkGen" :number-of-pages="79" use-router></b-pagination-nav>
+              <b-pagination-nav :link-gen="linkGen" :number-of-pages="79"></b-pagination-nav>
             </div>
           </div>
         </b-col>
@@ -114,8 +124,13 @@
       :candidate="currentCandidate"
     />
     <CreateCandidate
-      id="modalCreateCandidate"
+      id="modalCreateNewCandidate"
       v-on:addNewCandidateEventSuccess="addNewCandidateEventSuccess"
+    />
+    <EventCandidateList
+      :eventId="event.eventId"
+      :courseCode="courseCode"
+      :actualNumberOfTrainees="event.actualNumberOfTrainees"
     />
   </div>
 </template>
@@ -124,22 +139,24 @@
 import CandidateEdit from "./CandidateEdit";
 import ViewCandidate from "./ViewCandidate";
 import CreateCandidate from "./CreateCandidate";
-import { CandidateStatusMixin } from "../mixins";
+import EventCandidateList from "../event/EventCandidateList";
+
+import { CandidateStatusMixin, ToastMixin } from "../mixins";
 
 export default {
   components: {
     CandidateEdit,
     ViewCandidate,
-    CreateCandidate
+    CreateCandidate,
+    EventCandidateList
   },
-  mixins: [CandidateStatusMixin],
+  mixins: [CandidateStatusMixin, ToastMixin],
   created() {
     let pageNumber = this.$route.params.page;
     this.getCandidates(pageNumber);
   },
   data() {
     return {
-      sortDesc: false,
       fields: [
         { key: "all" },
         { key: "name", sortable: true, sortBy: "name" },
@@ -152,10 +169,14 @@ export default {
       currentCandidate: {},
       checkAll: false,
       courseCodes: [],
-      courseCode: null
+      courseCode: null,
+      event: {}
     };
   },
   computed: {
+    eventById() {
+      return this.$store.state.event.getEventById;
+    },
     courseCodesList() {
       return this.$store.state.event.loadAllCourseCode;
     },
@@ -167,10 +188,9 @@ export default {
     }
   },
   methods: {
-    eventActionButton(status) {
-      return status === "Cancelled" || status === "Done";
+    getEventById(id) {
+      this.$store.dispatch("event/getEventById", id);
     },
-
     viewCandidateInfo(candidate) {
       this.currentCandidate = candidate;
       this.$bvModal.show("modalViewCandidate");
@@ -182,7 +202,18 @@ export default {
     addNewCandidateEventSuccess(candidate) {
       this.candidates.unshift(candidate);
     },
-    showByEvent() {},
+    showByEvent() {
+      const code = this.courseCodes.find(code => code.text === this.courseCode);
+      if (this.courseCode === null) {
+        this.showToast("Select course code to show", "Warning!!!", "warning");
+        return;
+      }
+      this.getEventById(code.eventId);
+    },
+
+    /**
+     *
+     */
     cancelSection() {
       const sections = this.candidates.flatMap(candidate => {
         if (candidate.isChosen === true) {
@@ -203,13 +234,8 @@ export default {
     },
 
     /**
-     * This method will set pageNumber and push page in address bar
      *
-     * @param int number - a number in pagination
      */
-    paginPage(pageNum) {
-      this.$router.push(this.linkGen(pageNum));
-    },
     linkGen(pageNum) {
       return {
         name: "candidatePage",
@@ -218,6 +244,20 @@ export default {
     }
   },
   watch: {
+    eventById: {
+      handler() {
+        if (this.eventById.loaded === true) {
+          this.event = this.eventById.event;
+          this.$bvModal.show("candidateList");
+        } else if (this.eventById.loaded === false) {
+          this.showToast(
+            "Cannot load candidates list :(",
+            "Load event fail",
+            "danger"
+          );
+        }
+      }
+    },
     courseCodesList: {
       handler() {
         if (this.courseCodesList.data) {

@@ -12571,6 +12571,12 @@ input[type="color"].form-control:disabled {
   background: #ffffff;
 }
 
+.back-drop {
+  -webkit-backdrop-filter: saturate(100%) blur(10px);
+          backdrop-filter: saturate(100%) blur(10px);
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 .foot-nav-stick {
   border-top: 1px solid #cccccc;
 }

@@ -1,4 +1,4 @@
-import {accountService} from "../_service"
+import { accountService } from "../_service"
 
 export const account = {
     namespaced: true,
@@ -10,7 +10,8 @@ export const account = {
         updateRoles: { updating: false },
         saveAccount: {
             state: { loading: false },
-            data: {}},
+            data: {}
+        },
         updateAccount: { updating: false },
         disableAccount: { updating: false },
         enableAccount: { updating: false },
@@ -45,7 +46,7 @@ export const account = {
         },
         updateAccountSuccess(state, account) {
             state.updateAccount = { updated: true, account: account };
-            
+
         },
         updateAccountFailure(state) {
             state.updateAccount = { updated: false }
@@ -94,9 +95,25 @@ export const account = {
                 state: { success: false },
                 data: error
             }
-        }
+        },
 
-        
+        updateRolesRequest(state) {
+            state.updateRoles = {
+                updating: true
+            }
+        },
+        updateRolesSuccess(state, account) {
+            state.updateRoles = {
+                updated: true,
+                account: account
+            }
+        },
+        updateRolesFailure(state, error) {
+            state.updateRoles = {
+                updated: false,
+                error: error
+            }
+        }
     },
     actions: {
         getAllAccount({ commit }) {
@@ -127,7 +144,7 @@ export const account = {
             accountService.updateAccount(account).then(success => {
                 commit("updateAccountSuccess", success.body);
             }, error => {
-                    commit("updateAccountFailure", error.status);
+                commit("updateAccountFailure", error.status);
                 // eslint-disable-next-line no-console
                 console.error(error);
             })
@@ -137,7 +154,7 @@ export const account = {
             accountService.disableAccount(account).then(success => {
                 commit("disableAccountSuccess", success.body);
             }, error => {
-                    commit("disableAccountFailure", error.status);
+                commit("disableAccountFailure", error.status);
                 // eslint-disable-next-line no-console
                 console.error(error);
             })
@@ -147,12 +164,11 @@ export const account = {
             accountService.enableAccount(account).then(success => {
                 commit("enableAccountSuccess", success.body);
             }, error => {
-                    commit("enableAccountFailure", error.status);
+                commit("enableAccountFailure", error.status);
                 // eslint-disable-next-line no-console
                 console.error(error);
             })
         },
-        
         saveAccount({ commit }, { account }) {
             commit("saveAccountRequest");
             accountService.saveAccount(account).then(success => {
@@ -162,9 +178,18 @@ export const account = {
                     commit("saveAccountFailure", success.body);
                 }
             }, error => {
-                    commit("saveAccountFailure", error);
+                commit("saveAccountFailure", error);
                 // eslint-disable-next-line no-console
                 console.log(error);
+            })
+        },
+        updateRoles({ commit }, { username, roles }) {
+
+            commit("updateRolesRequest");
+            accountService.updateRoles(username, roles).then(success => {
+                commit("updateRolesSuccess", success.body);
+            }, error => {
+                commit("updateRolesFailure", error.body);
             })
         }
     }

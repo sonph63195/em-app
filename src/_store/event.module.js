@@ -68,7 +68,7 @@ export const event = {
             state.getEventById = { loading: true }
         },
         getEventByIdSuccess(state, event) {
-            state.getEventById = { loaded: true };
+            state.getEventById = { loaded: true, event: event };
             state.event = event;
         },
         getEventByIdFailure(state) {

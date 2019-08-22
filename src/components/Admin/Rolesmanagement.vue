@@ -31,16 +31,17 @@
             <b-form-group>
               <b-form-select
                 v-model="data.item.newRole"
-                @change="AddNewRole(data.item)"
+                @change="addNewRole(data.item)"
                 :options="roles"
               ></b-form-select>
             </b-form-group>
           </template>
 
-          <template slot="submit">
-            <b-button variant="secondary" @click="saveRoles" type="submit">Submit</b-button>
+          <template slot="submit" slot-scope="data">
+            <b-button variant="secondary" @click="saveRoles(data.item)" type="submit">Submit</b-button>
           </template>
         </b-table>
+        <span v-if="updateRoles.updating">loading...</span>
       </b-container>
     </b-card-body>
   </b-card>
@@ -91,9 +92,17 @@ export default {
       ],
       roles: [
         { value: null, text: "Select roles" },
-        { value: "ROLE_EVENTMANAGER", text: "ROLE_EVENTMANAGER" },
-        { value: "ROLE_CANDIDATEMANAGER", text: "ROLE_CANDIDATEMANAGER" },
-        { value: "ROLE_REPORTER", text: "ROLE_REPORTER" }
+        {
+          value: "ROLE_EVENTMANAGER",
+          text: "ROLE_EVENTMANAGER",
+          authorityId: 3
+        },
+        {
+          value: "ROLE_CANDIDATEMANAGER",
+          text: "ROLE_CANDIDATEMANAGER",
+          authorityId: 4
+        },
+        { value: "ROLE_REPORTER", text: "ROLE_REPORTER", authorityId: 2 }
       ]
     };
   },
@@ -101,7 +110,7 @@ export default {
     getAllAccount() {
       this.$store.dispatch("account/getAllAccount");
     },
-    AddNewRole(account) {
+    addNewRole(account) {
       let flag = 0;
       account.authorities.forEach(role => {
         if (role.userRole === account.newRole) {
@@ -126,10 +135,27 @@ export default {
       const index = account.authorities.findIndex(role => {
         return role.userRole === userRole;
       });
-      console.log(index);
       account.authorities.splice(index, 1);
     },
-    saveRoles() {}
+    saveRoles(account) {
+      const authorities = account.authorities;
+      let roles = authorities.flatMap(roleA => {
+        if (roleA.userRole !== "ROLE_ADMIN") {
+          const role = this.roles.find(role => role.text === roleA.userRole);
+          return role.authorityId;
+        }
+        return null;
+      });
+      //remove null from array
+      let index = roles.findIndex(role => role === null);
+
+      if (index >= 0) {
+        roles.splice(index, 1);
+      }
+      // send request
+      const { username } = account;
+      this.$store.dispatch("account/updateRoles", { username, roles });
+    }
   },
   mounted() {
     this.getAllAccount();
@@ -137,6 +163,9 @@ export default {
   computed: {
     accounts() {
       return this.$store.state.account.getAllAccount;
+    },
+    updateRoles() {
+      return this.$store.state.account.updateRoles;
     }
   },
   watch: {

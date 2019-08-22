@@ -26,14 +26,16 @@ function getAllAccount() {
 function getMyAccount(username) {
     return request.get(`account?username=${username}`, authHeader.get());
 }
+
 /**
      * @param authorities the array account's authority ids.
      * @param username      the username.
      * @return Updated account if add success, otherwise return null.
      */
-function updateRoles(username) {
-    return request.patch('update-roles', username, authHeader.get());
+function updateRoles(username, roles) {
+    return request.patch(`account/update-roles?username=${username}`, roles, authHeader.get());
 }
+
 /**
      * Add a new account to system.
      *
@@ -59,7 +61,7 @@ function updateAccount(account) {
      * @return Disabled account if add success, otherwise return null.
      */
 function disableAccount(username) {
-    return request.patch(`account/disable/${username}`,authHeader.get());
+    return request.patch(`account/disable/${username}`, authHeader.get());
 }
 /**
     * Enable an account
