@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="candidateList" :title="this.courseCode">
+  <b-modal id="candidateList" :title="this.courseCode" size="xl">
     <b-card no-body class="border-0">
       <div class="border-bottom p-2 d-flex">
         <div class="flex-fill">
@@ -125,12 +125,12 @@
   </b-modal>
 </template>
 <script>
-import { CandidateStatusMixin } from "../mixins";
+import { CandidateStatusMixin, ToastMixin } from "../mixins";
 import EventCandidateInfo from "./EventCandidateInfo";
 import CreateCandidate from "../candidate/CreateCandidate";
 
 export default {
-  mixins: [CandidateStatusMixin],
+  mixins: [CandidateStatusMixin, ToastMixin],
   components: {
     EventCandidateInfo,
     CreateCandidate
@@ -176,6 +176,10 @@ export default {
      */
     candidates() {
       return this.$store.state.section.candidates;
+    },
+
+    cancelSections() {
+      return this.$store.state.section.cancelSections;
     }
   },
   watch: {
@@ -201,6 +205,16 @@ export default {
           candidate.isChosen = this.checkAll;
           //console.log(candidate);
         });
+      }
+    },
+    cancelSections: {
+      handler() {
+        if (this.cancelSections.state.success === true) {
+          this.getCandidates();
+          this.showToast("Successfull", "Success", "success");
+        } else if (this.cancelSections.state.success === false) {
+          this.showToast("Cannot remove ", "Error", "danger");
+        }
       }
     }
   },
@@ -255,9 +269,3 @@ export default {
   }
 };
 </script>
-<style>
-#candidateList___BV_modal_content_ {
-  width: 1500px;
-  margin-left: -500px;
-}
-</style>

@@ -8,18 +8,23 @@
       </div>
     </div>
     <div class="d-flex m-2">
-      <div class="flex-fill"></div>
-      <b-form class="d-flex mx-2" @submit.prevent="showByEvent">
-        <b-form-select size="sm" v-model="courseCode" :options="courseCodes"></b-form-select>
+      <b-form class="flex-fill d-flex mx-2" @submit.prevent="showByEvent">
+        <!-- <b-form-select size="sm" v-model="courseCode" :options="courseCodes"></b-form-select> -->
+        <vue-bootstrap-typeahead
+          class="w-50"
+          v-model="courseCode"
+          :data="courseCodes1"
+          placeholder="Type an course code..."
+        />
         <b-button
           v-b-tooltip.hover
           title="Show candidates list of event"
-          size="sm"
           type="submit"
           variant="outline-dark"
           class="ml-2"
         >Show</b-button>
       </b-form>
+      <div class="flex-fill"></div>
     </div>
     <div>
       <div v-if="getCandidatesState.loaded === true" class="table-responsive-lg">
@@ -141,6 +146,8 @@ import ViewCandidate from "./ViewCandidate";
 import CreateCandidate from "./CreateCandidate";
 import EventCandidateList from "../event/EventCandidateList";
 
+import VueBootstrapTypeahead from "vue-bootstrap-typeahead";
+
 import { CandidateStatusMixin, ToastMixin } from "../mixins";
 
 export default {
@@ -148,7 +155,8 @@ export default {
     CandidateEdit,
     ViewCandidate,
     CreateCandidate,
-    EventCandidateList
+    EventCandidateList,
+    VueBootstrapTypeahead
   },
   mixins: [CandidateStatusMixin, ToastMixin],
   created() {
@@ -169,6 +177,7 @@ export default {
       currentCandidate: {},
       checkAll: false,
       courseCodes: [],
+      courseCodes1: [],
       courseCode: null,
       event: {}
     };
@@ -204,8 +213,8 @@ export default {
     },
     showByEvent() {
       const code = this.courseCodes.find(code => code.text === this.courseCode);
-      if (this.courseCode === null) {
-        this.showToast("Select course code to show", "Warning!!!", "warning");
+      if (!code || this.courseCode === null) {
+        this.showToast("Type course code to show", "Warning!!!", "warning");
         return;
       }
       this.getEventById(code.eventId);
@@ -262,6 +271,7 @@ export default {
       handler() {
         if (this.courseCodesList.data) {
           this.courseCodes = [];
+          this.courseCodes1 = [];
           const codes = this.courseCodesList.data;
           const codesKeys = Object.keys(codes);
           codesKeys.forEach(key => {
@@ -270,6 +280,7 @@ export default {
               text: codes[key],
               eventId: key
             });
+            this.courseCodes1.push(codes[key]);
           });
           this.courseCodes.unshift({
             value: null,

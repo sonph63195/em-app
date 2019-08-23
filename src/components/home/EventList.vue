@@ -1,15 +1,10 @@
 <template>
-  <b-col cols="12" md="4" lg="3">
+  <b-col cols="12" md="4" lg="3" class="overflow-auto">
     <div class="py-3">
       <h4 class="text-muted text-center">Recent Event</h4>
     </div>
     <div v-if="loaded === true">
-      <router-link
-        v-for="(event, index) in events"
-        :key="index"
-        :to="`event-info/eventId=${event.eventId}`"
-        style="text-decoration: none!important"
-      >
+      <div v-for="(event, index) in events" :key="index">
         <div class="text-dark home-event-link">
           <div v-b-tooltip.hover :title="event.courseCode" class="bg-white rounded-10 p-3 mb-3">
             <h6 class="text-truncate">
@@ -32,7 +27,7 @@
             </div>
           </div>
         </div>
-      </router-link>
+      </div>
     </div>
     <div v-if="loading === true" class="d-flex justify-content-center">
       <b-spinner label="Spinning"></b-spinner>
@@ -54,12 +49,23 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      currentPage: 1
+      //perPage: 3
+    };
   },
   mounted() {
     this.geteventRecent();
   },
   computed: {
+    rows() {
+      return this.events.length;
+    },
+    perPage() {
+      let num = Math.floor(this.rows / 6);
+      if (this.rows % 6 !== 0) num += 1;
+      return num;
+    },
     events() {
       return this.$store.state.event.eventRecent.data;
     },
