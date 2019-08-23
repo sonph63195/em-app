@@ -1,15 +1,11 @@
 <template>
-  <b-form ref="form" @submit.stop.prevent="handleRegister" novalidate>
+  <b-form @submit.prevent="onSubmit" v-if="show">
     <b-form-group
-      :state="regUsernameState"
-      invalid-feedback="Username is invalid"
-      valid-feedback="Good"
     >
       <label for="username">Username:</label>
       <b-form-input
         id="username"
-        v-model="regUsername"
-        :state="regUsernameState"
+        v-model="account.username"
         trim
         required
         minlength="3"
@@ -18,15 +14,11 @@
       />
     </b-form-group>
     <b-form-group
-      invalid-feedback="Firstname is invalid"
-      :state="regFirstnameState"
-      valid-feedback="Good"
     >
       <label for="firstname">Firstname:</label>
       <b-form-input
         id="firstname"
-        v-model="regFirstname"
-        :state="regFirstnameState"
+        v-model="account.firstName"
         minlength="3"
         maxlength="15"
         required
@@ -34,14 +26,10 @@
       />
     </b-form-group>
     <b-form-group
-      invalid-feedback="Lastname is invalid"
-      :state="regLastnameState"
-      valid-feedback="Good"
     >
       <label for="lastname">Lastname:</label>
       <b-form-input
-        v-model="regLastname"
-        :state="regLastnameState"
+        v-model="account.lastName"
         id="lastname"
         minlength="3"
         maxlength="15"
@@ -50,22 +38,18 @@
       />
     </b-form-group>
     <b-form-group
-      invalid-feedback="Password is invalid"
-      valid-feedback="Good"
-      :state="regPasswordState"
     >
       <label for="password">Password:</label>
       <b-form-input
         id="password"
-        v-model="regPassword"
-        :state="regPasswordState"
+        v-model="account.password"
         minlength="3"
         maxlength="15"
         required
         type="password"
       />
     </b-form-group>
-    <b-form-group :state="regConfirmPasswordState" invalid-feedback="Confirm is not match">
+    <!-- <b-form-group :state="regConfirmPasswordState" invalid-feedback="Confirm is not match">
       <label for="confirmpassword">Confirm password:</label>
       <b-form-input
         id="confirmpassword"
@@ -75,8 +59,8 @@
         :state="regConfirmPasswordState"
         invalid-feedback="Confirm is not match"
       />
-    </b-form-group>
-    <b-button @click="register" class="btn btn-lg btn-success mt-2" type="submit">
+    </b-form-group> -->
+    <b-button type="submit" class="btn btn-lg btn-success mt-2">
       <i class="fas fa-check">
         <font-awesome-icon icon="check" />
       </i> Save
@@ -89,64 +73,53 @@
   </b-form>
 </template>
 <script>
+import { ToastMixin } from "../mixins";
 export default {
+  mixins: [ToastMixin],
+  mounted() {},
   data() {
     return {
-      regConfirmPasswordState: null,
-      regPasswordState: null,
-      regUsernameState: null,
-      regFirstnameState: null,
-      regLastnameState: null,
-      regUsername: "",
-      regFirstname: "",
-      regLastname: "",
-      regPassword: "",
-      regConfirmPassword: ""
+      // regConfirmPasswordState: null,
+      account: {
+        username: "",
+        firstName: "",
+        lastName: "",
+        password: ""
+      },
+      show: true,
+      // regConfirmPassword: ""
     };
   },
   methods: {
-    // check state of from Create account
-    checkRegFormValidity() {
-      this.regUsernameState =
-        this.regUsername.length > 2 && this.regUsername.length < 50
-          ? "valid"
-          : "invalid";
-      this.regFirstnameState =
-        this.regFirstname.length > 2 && this.regFirstname.length < 50
-          ? "valid"
-          : "invalid";
-      this.regLastnameState =
-        this.regLastname.length > 2 && this.regLastname.length < 50
-          ? "valid"
-          : "invalid";
-      this.regPasswordState = this.regPassword.length > 0 ? "valid" : "invalid";
-      if (this.regPasswordState == "valid") {
-        this.regConfirmPasswordState =
-          this.regPassword == this.regConfirmPassword ? "valid" : "invalid";
-      }
-      const valid =
-        (this.regUsernameState == this.regFirstnameState) ==
-          this.regLastnameState &&
-        this.regLastnameState == "valid" &&
-        this.regPasswordState == "valid" &&
-        this.regConfirmPasswordState == "valid"
-          ? true
-          : false;
-      return valid;
+    register() {
+      const { account } = this;
+      this.$store.dispatch("account/saveAccount", { account });
     },
-    // call @click
-    register(evt) {
-      evt.preventDefault();
-      this.handleRegister();
+    onSubmit(evt) {
+      alert(JSON.stringify(this.account))
+      this.register();
     },
-    // call @submit
-    handleRegister() {
-      if (!this.checkRegFormValidity()) {
-        return;
+  },
+  watch: {
+    saveAccount: {
+      handler() {
+        if (this.saveAccount.state.success === true) {
+          this.showToast("Successful", "Succes", "success");
+          this.$emit(
+            "addNewAccountSuccess",
+            this.saveAccount.data.identifiedObject
+          );
+        } else if (this.saveAccount.state.success === false) {
+          let msg = this.saveAccount.data.errors[0];
+          this.showToast(msg, "Error", "danger");
+        }
       }
-      this.$refs.form.classList.add("was-validated");
-      alert("save");
     }
+  },
+  computed: {
+    saveAccount() {
+      return this.$store.state.account.saveAccount;
+    },
   }
 };
 </script>

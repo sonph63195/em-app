@@ -87,7 +87,7 @@ export default {
         this.$store.dispatch("account/enableAccount", item.username);
       }
       this.getAllAccount();
-      // this.getAllAccount();
+      this.getAllAccount();
     }
   },
 
