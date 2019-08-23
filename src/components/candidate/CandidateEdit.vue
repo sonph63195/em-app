@@ -20,6 +20,20 @@
                     ></b-form-input>
                   </b-form-group>
                 </b-col>
+                <b-col cols="12">
+                  <b-form-group
+                    id="input-group-account"
+                    label="Account"
+                    label-for="input-account"
+                  >
+                    <b-form-input
+                      id="input-account"
+                      v-model="candidate.account"
+                      type="text"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
                 <b-col cols="12" md="6">
                   <b-form-group
                     id="input-group-candidateNationId"

@@ -25,7 +25,7 @@
                   <b-form-checkbox v-model="checkedAll">All</b-form-checkbox>
                 </div>
                 <div class="filter flex-fill">
-                  <b-dd text="Event Status" size="sm" variant="white" class="m-2">
+                  <!-- <b-dd text="Event Status" size="sm" variant="white" class="m-2">
                     <b-dropdown-form>
                       <b-form-checkbox
                         v-for="status in statuses"
@@ -51,7 +51,7 @@
                     <b-dropdown-form>
                       <b-form-input type="date" />
                     </b-dropdown-form>
-                  </b-dd>
+                  </b-dd>-->
                 </div>
               </div>
             </b-col>

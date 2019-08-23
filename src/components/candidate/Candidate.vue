@@ -18,7 +18,7 @@
                   <font-awesome-icon icon="plus-circle" class="mr-3" />Create Candidate
                 </b-button>
               </div>
-              <div
+              <!-- <div
                 class="bg-white rounded-5 w-100 d-flex flex-1 flex-lg-grow-1 align-self-center mt-3 mt-lg-0"
               >
                 <div class="filter flex-fill d-flex">
@@ -48,7 +48,7 @@
                     </b-dropdown-form>
                   </b-dd>
                 </div>
-              </div>
+              </div>-->
             </b-col>
           </b-row>
 
